@@ -1,0 +1,15 @@
+- url: /hyperledger
+  title: Hyperledger源码分析
+  group: navigation
+- url: /installation
+  title: 安装部署
+  group: navigation
+- url: /translations
+  title: 原创翻译
+  group: navigation
+- url: /news
+  title: 行业动态
+  group: navigation
+- url: /resources
+  title: 网络资源
+  group: navigation
