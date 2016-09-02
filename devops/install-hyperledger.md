@@ -25,6 +25,7 @@ export PATH=$PATH:/usr/local/sbin
 ```
 
 * 安装Git并下载源码
+
 ```
 mkdir -p $GOPATH/src/github.com/hyperledger
 cd $GOPATH/src/github.com/hyperledger
@@ -259,6 +260,7 @@ export PATH=$PATH:/usr/local/sbin
 ```
 
 * 安装Git并下载源码
+
 ```
 mkdir -p $GOPATH/src/github.com/hyperledger
 cd $GOPATH/src/github.com/hyperledger
@@ -266,6 +268,7 @@ git clone https://github.com/hyperledger/fabric.git
 ```
 
 * 安装RocksDB
+
 ```
 apt-get install -y libsnappy-dev zlib1g-dev libbz2-dev
 cd /tmp
@@ -277,6 +280,7 @@ INSTALL_PATH=/usr/local make install-shared
 ```
 
 * 安装pip
+
 ```
 apt-get install -y python-pip
 pip install --upgrade pip
@@ -286,11 +290,13 @@ pip install -I flask#####0.10.1 python-dateutil#####2.2 pytz#####2014.3 pyyaml##
 
 * 错误：Release: The following signatures couldn't be verified because the public key is not available: 
  NO_PUBKEY 2EA8F35793D8809A
+
 ```
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809
 ```
 
 * 错误：peer: error while loading shared libraries: librocksdb.so.4.1: cannot open shared object file: No such file or directory
+
 ```
 cp /usr/local/lib/librocksdb.so.4.1* /usr/lib/
 ```

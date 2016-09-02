@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <title>安装部署</title>
     <meta name="description" content="">
-    <meta name="author" content="wutongtree">
+    <meta name="author" content="梧桐树">
 
     <!-- Enable responsive viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +57,7 @@
     
       
       	
-      	<li><a href="/installation">安装部署</a></li>
+      	<li><a href="/devops">动手实战</a></li>
       	
       
     
@@ -127,12 +127,15 @@ export PATH=$PATH:/usr/local/sbin
 </code></pre>
 
 <ul>
-  <li>安装Git并下载源码
-    <pre><code>mkdir -p $GOPATH/src/github.com/hyperledger
+  <li>安装Git并下载源码</li>
+</ul>
+
+<pre><code>mkdir -p $GOPATH/src/github.com/hyperledger
 cd $GOPATH/src/github.com/hyperledger
 git clone http://gerrit.hyperledger.org/r/fabric
 </code></pre>
-  </li>
+
+<ul>
   <li>下载并安装Vagrant和VirtualBox</li>
 </ul>
 
@@ -352,14 +355,19 @@ export PATH=$PATH:/usr/local/sbin
 </code></pre>
 
 <ul>
-  <li>安装Git并下载源码
-    <pre><code>mkdir -p $GOPATH/src/github.com/hyperledger
+  <li>安装Git并下载源码</li>
+</ul>
+
+<pre><code>mkdir -p $GOPATH/src/github.com/hyperledger
 cd $GOPATH/src/github.com/hyperledger
 git clone https://github.com/hyperledger/fabric.git
 </code></pre>
-  </li>
-  <li>安装RocksDB
-    <pre><code>apt-get install -y libsnappy-dev zlib1g-dev libbz2-dev
+
+<ul>
+  <li>安装RocksDB</li>
+</ul>
+
+<pre><code>apt-get install -y libsnappy-dev zlib1g-dev libbz2-dev
 cd /tmp
 git clone https://github.com/facebook/rocksdb.git
 cd rocksdb
@@ -367,25 +375,32 @@ git checkout v4.1
 PORTABLE=1 make shared_lib
 INSTALL_PATH=/usr/local make install-shared
 </code></pre>
-  </li>
-  <li>安装pip
-    <pre><code>apt-get install -y python-pip
+
+<ul>
+  <li>安装pip</li>
+</ul>
+
+<pre><code>apt-get install -y python-pip
 pip install --upgrade pip
 pip install behave nose docker-compose
 pip install -I flask#####0.10.1 python-dateutil#####2.2 pytz#####2014.3 pyyaml#####3.10 couchdb#####1.0 flask-cors#####2.0.1 requests#####2.4.3
 </code></pre>
-  </li>
+
+<ul>
   <li>错误：Release: The following signatures couldn’t be verified because the public key is not available: 
- NO_PUBKEY 2EA8F35793D8809A
-    <pre><code>apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809
-</code></pre>
-  </li>
-  <li>错误：peer: error while loading shared libraries: librocksdb.so.4.1: cannot open shared object file: No such file or directory
-    <pre><code>cp /usr/local/lib/librocksdb.so.4.1* /usr/lib/
-</code></pre>
-    <p>也可以把/usr/local/lib目录增加到/etc/ld.so.conf目录下。或者编译的时候改成：INSTALL_PATH=/usr make install-shared</p>
-  </li>
+ NO_PUBKEY 2EA8F35793D8809A</li>
 </ul>
+
+<pre><code>apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809
+</code></pre>
+
+<ul>
+  <li>错误：peer: error while loading shared libraries: librocksdb.so.4.1: cannot open shared object file: No such file or directory</li>
+</ul>
+
+<pre><code>cp /usr/local/lib/librocksdb.so.4.1* /usr/lib/
+</code></pre>
+<p>也可以把/usr/local/lib目录增加到/etc/ld.so.conf目录下。或者编译的时候改成：INSTALL_PATH=/usr make install-shared</p>
 
 <h4 id="docker-2">编译Docker镜像</h4>
 <pre><code>cd $GOPATH/src/github.com/hyperledger/fabric
@@ -406,7 +421,7 @@ make peer-image
       <footer>
         <p>&copy; 2016
           <a href="" target="_blank" title="区块链实用手册">区块链实用手册</a>
-          原创版权归 <a href="https://wutongtree.com" target="_blank" title="wutongtree">wutongtree</a> 所有
+          原创文章的版权均属于 <a href="https://wutongtree.com" target="_blank" title="梧桐树">梧桐树</a> 所有，如需合作请联系<a href="mailto:hyper@crypto2x.com" target="_blank">我们</a>
         </p>
       </footer>
 

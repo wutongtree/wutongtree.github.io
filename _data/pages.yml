@@ -1,8 +1,8 @@
 - url: /hyperledger
   title: Hyperledger源码分析
   group: navigation
-- url: /installation
-  title: 安装部署
+- url: /devops
+  title: 动手实战
   group: navigation
 - url: /translations
   title: 原创翻译
