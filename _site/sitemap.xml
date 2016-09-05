@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>/translations/Next-Consensus-Architecture-Proposal_zh</loc>
+</url>
+<url>
 <loc>/archive</loc>
 </url>
 <url>
@@ -25,22 +28,22 @@
 <loc>/hyperledger/events</loc>
 </url>
 <url>
-<loc>/hyperledger/</loc>
+<loc>/news/</loc>
 </url>
 <url>
 <loc>/devops/</loc>
 </url>
 <url>
-<loc>/</loc>
-</url>
-<url>
-<loc>/translations/</loc>
+<loc>/hyperledger/</loc>
 </url>
 <url>
 <loc>/resources/</loc>
 </url>
 <url>
-<loc>/news/</loc>
+<loc>/translations/</loc>
+</url>
+<url>
+<loc>/</loc>
 </url>
 <url>
 <loc>/devops/install-hyperledger</loc>

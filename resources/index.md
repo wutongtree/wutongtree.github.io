@@ -19,3 +19,4 @@ group: navigation
 
 ## 新闻类
 * [CoinDesk](http://www.coindesk.com/)
+* [行业动态](http://blog.wutongtree.com/)

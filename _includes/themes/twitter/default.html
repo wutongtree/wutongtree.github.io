@@ -55,10 +55,12 @@
       <footer>
         <p>&copy; {{ site.time | date: '%Y' }}
           <a href="{{ site.url }}" target="_blank" title="{{ site.title }}">{{ site.title }}</a>
-          原创文章的版权均属于 <a href="{{ site.author.website }}" target="_blank" title="{{ site.author.name }}">{{ site.author.name }}</a> 所有，如需合作请联系<a href="mailto:{{ site.author.email }}" target="_blank">我们</a>
-        </p>
-      </footer>
-
+            原创文章的版权均属于 <a href="{{ site.author.website }}" target="_blank" title="{{ site.author.name }}">{{ site.author.name }}</a> 所有，如需合作请联系<a href="mailto:{{ site.author.email }}" target="_blank">我们</a> <br>
+	    With help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+            and <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>
+          </p>
+        </footer>
+  
     </div>
 
     {% include JB/analytics %}

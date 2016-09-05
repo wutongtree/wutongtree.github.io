@@ -1,0 +1,183 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>[翻译]Next Consensus Architecture Proposal</title>
+    <meta name="description" content="">
+    <meta name="author" content="梧桐树">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">区块链实用手册</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/hyperledger">Hyperledger源码分析</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/devops">动手实战</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/translations">原创翻译</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/news">相关技术</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/resources">网络资源</a></li>
+      	
+      
+    
+  
+
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+
+<div class="page-header">
+  <h1>[翻译]Next Consensus Architecture Proposal </h1>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    
+<p>原文：<a href="https://github.com/hyperledger/fabric/blob/master/proposals/r1/Next-Consensus-Architecture-Proposal.md">https://github.com/hyperledger/fabric/blob/master/proposals/r1/Next-Consensus-Architecture-Proposal.md</a></p>
+
+<p>作者: Elli Androulaki, Christian Cachin, Angelo De Caro, Konstantinos Christidis, Chet Murthy, Binh Nguyen, Alessandro Sorniotti, and Marko Vukolić</p>
+
+<p>翻译：<a href="https://wutongtree.com">梧桐树</a></p>
+
+<hr />
+
+<p>这篇文档记录的是区块链基础架构，区块链节点根据角色分为<em>peers</em>（维护状态/总账的节点）和<em>consenters</em>（批准区块链状态中交易顺序的节点）。在通常的区块链架构中（包括2016年7月的Hyperledger fabric），这些角色都是集成的（参看Hyperledger fabic的<em>validating peer</em>）。这个架构还引入了背书节点（endorsers）的概念，它其实是一种特殊类型的节点，用来模拟执行和背书交易（大概和Hyperldger fabric 0.5-developer-preview的执行/验证交易是类似的）。</p>
+
+<p>这种架构和peers/consenters/endorsers集成的设计相比有如下的优势：</p>
+
+<ul>
+  <li><strong>链码的可信灵活性（chaincode trust flexibility）</strong>。从架构上，区分开链码（区块链应用程序）是<em>可信</em>的<em>假设</em>和共识是不可信的假设。就是说，参与到共识服务中的节点可能是批准节点（consenters），也能容忍一些节点失败或者捣乱。每个链码的背书节点也可能是不一样的。</li>
+  <li><strong>可扩展性</strong>。负责特定链码的背书节点和批准节点是正交的，这比所有功能都在同一个节点完成更好扩展。尤其是，当最终不同的链码都指定不同的背书节点时，链码会在不同的背书节点上分散开，它们就可以并行执行了，链码执行这里叫背书（endorsement）。另外，链码执行是非常耗时的，已经从共识服务的关键路径中移除了。</li>
+  <li><strong>机密性</strong>。这个架构使对内容和执行状态更新有<em>机密性</em>要求的链码部署更容易了。</li>
+  <li><strong>共识模块性</strong>。这个架构是<em>模块化的</em>，运行插件化的共识实现。</li>
+</ul>
+
+<h2 id="section">目录</h2>
+<ol>
+  <li>系统架构</li>
+  <li>基本的交易背书工作流</li>
+  <li>背书策略</li>
+  <li>区块链数据结构</li>
+  <li>状态转换和检查点</li>
+  <li>机密性</li>
+</ol>
+
+<hr />
+
+<h2 id="section-1">1. 系统架构</h2>
+<p>区块链是由很多相互通信的节点组成的分布式系统。区块链运行程序（叫链码），保存状态和总账数据，执行交易。链码是最核心的元素，交易是在链码上执行的操作，并且只有链码才能更改状态。交易必须要有背书，只有有背书的交易才能被提交，才能影响状态。有一些具有管理功能和参数的特殊链码，统称<em>系统链码</em>。</p>
+
+<h3 id="section-2">1.1. 交易</h3>
+
+<p>交易有两种类型：</p>
+
+<ul>
+  <li><em>部署交易</em> 用程序作为它的一个参数创建新的链码。当部署交易成功执行以后，我们就说链码被安装到“链上”了。</li>
+  <li><em>调用交易</em> 在前面部署的链码上执行一个操作。一个调用交易指的是链码和它提供的功能。如果成功的话，链码会执行指定的功能，可能会修改相关的状态，然后返回输出。</li>
+</ul>
+
+<p>后面还会介绍，部署交易是调用交易的特殊情况，调用交易创建新的链码就是在系统链码上的调用交易。</p>
+
+<p><strong>注意</strong>：<em>这个文档假设一个交易创建新的链码或者调用交易都是在已经部署的链码上操作的。这个文档没有描述如下内容：a) 支持跨链码的交易; b) 查询交易（只读的）的优化</em>。</p>
+
+<h3 id="section-3">1.2. 状态</h3>
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer>
+        <p>&copy; 2016
+          <a href="" target="_blank" title="区块链实用手册">区块链实用手册</a>
+            原创文章的版权均属于 <a href="https://wutongtree.com" target="_blank" title="梧桐树">梧桐树</a> 所有，如需合作请联系<a href="mailto:hyper@crypto2x.com" target="_blank">我们</a> <br>
+	    With help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+            and <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>
+          </p>
+        </footer>
+  
+    </div>
+
+    
+
+
+
+  </body>
+</html>
+

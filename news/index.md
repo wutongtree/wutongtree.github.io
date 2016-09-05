@@ -1,9 +1,9 @@
 ---
 layout: page
-title: "行业动态"
+title: "相关技术"
 description: ""
 group: navigation
 ---
 {% include JB/setup %}
 
-# 行业动态
+# 相关技术
