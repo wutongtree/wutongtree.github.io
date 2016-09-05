@@ -9,12 +9,14 @@ description: ""
 Github作为一个托管代码的平台，还提供了介绍项目的功能，这个功能扩展出来就是一个静态网站的托管平台，就叫Github Pages。Github本身支持Markown文件解析展示，不过这个功能比较简单，有很多工具可以实现把较多的Markdown文件组织转换成静态网站，Github官方推荐的就是Jekyll。Github本身又对托管的代码有版本控制的功能，所以能够实现通过Markdown编辑文档，然后Git管理这些文档并进行发布。
 
 使用Jekyll的方式有多种：
+
 * 最原始的方法就是自己写所有的文件，可以参考阮一峰写的[搭建一个免费的，无限流量的Blog----github Pages和Jekyll入门](http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html)。
 * 可以参考Github的文档，介绍的比较详细，[Using Jekyll as a static site generator with GitHub Pages](https://help.github.com/articles/using-jekyll-as-a-static-site-generator-with-github-pages/)，采用[Bundler](http://bundler.io/)来管理Ruby的依赖，可以进行本身预览或者生成静态网页。
 * 采用[Jekyll-Bootstrap](http://jekyllbootstrap.com/)，我们这里就是用的它，但是默认的操作方式会有Bug，CSS文件显示会有问题，后面我会写解决办法。
 * 当然还可以用别人做好的模版，拿来改改也可以用 ^_^。
 
 至于为什么要用Markdown来写文档，除了它比较流行支持的平台比较多之外，更重要的还是它内在的好处，就是能够聚焦到内容本身，并且可移植，就像MVC框架一样，M和C的时候不需要太多的关注V的内容。其实Jekyll还是需要修改一点Markdown文件本身的，至少需要加上Front Matter，这是YAML格式编写的文件头，Jekyll通过识别它进行展示，像下面这样：
+
 ```
 ---
 layout: post
@@ -34,6 +36,7 @@ title: Blogging Like a Hacker
 * 安装Jekyll
 
 安装Jekyll最简单的方式就是通过RubyGems：
+
 ```
 gem install jekyll
 ```
@@ -41,6 +44,7 @@ gem install jekyll
 * 用Jekyll-Bootstrap初始化刚创建的repository
 
 记得替换下面的repository：
+
 ```
 git clone https://github.com/plusjade/jekyll-bootstrap.git wutongtree.github.io
 cd wutongtree.github.io
@@ -50,6 +54,7 @@ git remote set-url origin git@github.com:wutongtree/wutongtree.github.io.git
 * 增加或者切换主题
 
 从Github上下载的Jekyll-Bootstrap是没有bootstrap-3这个theme的，但是_layout用的却是bootstrap-3，所以直接运行的话样式是不对的，控制台会报错：
+
 ```
 [2016-09-02 23:30:55] ERROR `/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css' not found.
 [2016-09-02 23:30:55] ERROR `/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css' not found.
@@ -63,6 +68,7 @@ git remote set-url origin git@github.com:wutongtree/wutongtree.github.io.git
 * 切换主题
 
 比如我用的twitter：
+
 ```
 rake theme:switch name="twitter"
 ```
@@ -70,6 +76,7 @@ rake theme:switch name="twitter"
 * 增加主题
 
 如果还是想用bootstrap-3，可以增加主题：
+
 ```
 rake theme:install git=https://github.com/jekyll-bootstrap-3/bootstrap-theme
 ```
@@ -78,6 +85,7 @@ rake theme:install git=https://github.com/jekyll-bootstrap-3/bootstrap-theme
 * 本地测试
 
 解决了主题的问题以后就可以本地测试一下看看效果了：
+
 ```
 jekyll serve
 ```
@@ -88,6 +96,7 @@ jekyll serve
 * 给Pages页增加权重或者顺序
 
 在页面的Front Matter上增加一个字段，比如下面的weight：
+
 ```
 ---
 layout: page
@@ -99,10 +108,12 @@ weight: 1
 ```
 
 然后修改用到的theme对应的default.html文件，比如：_includes/themes/twitter/default.html，找到
+
 ```
 assign pages_list = site.pages
 ```
 修改为：
+
 ```
 assign pages_list = site.pages | sort:"weight"
 ```
@@ -112,6 +123,7 @@ assign pages_list = site.pages | sort:"weight"
 * 利用Jekyll内置的序号
 
 直接修改每个Pages页面的需要，比如：
+
 ```
 01_categories.html
 02_archive.html
@@ -121,6 +133,7 @@ assign pages_list = site.pages | sort:"weight"
 * 手动排列页面的顺序
 
 专门用一个页面来排列顺序，比如增加一个_data目录，在这个目录下增加一个pages.yml文件，内容如下：
+
 ```
 - url: /hyperledger
   title: Hyperledger源码分析
@@ -163,6 +176,7 @@ Jekyll发布的文章都需要带着Front Matter，可以用两种方法：
 rake post title="Hello World"
 ```
 这种方式创建的文章会自带创建时间，文件名格式是：2016-09-03-hello-world.md，存放在_post目录下，生成的文件自带文件头：
+
 ```
 ---
 layout: post
@@ -179,6 +193,7 @@ tags: []
 * 自己写文件头
 
 为了比较好的对文档进行归类，做成类似wiki的系统，可以在repository的根目录下创建分类目录，然后里面手动创建文件，拷贝上面生成的文件头，不过layout需要修改一下，我用的是page，这样文件名就不用带时间格式了，比如resources/index.md：
+
 ```
 ---
 layout: page
@@ -207,6 +222,7 @@ group: navigation
 
 ## 0x05 发布文章
 直接在工程的根目录下运行jekyll命令就可以生成静态的网站了，然后再发布到Github上就可以了：
+
 ```
 jekyll build
 git commit -am "xxx"

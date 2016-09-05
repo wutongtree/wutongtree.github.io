@@ -23,12 +23,14 @@ pip install mkdocs
 * 创建文档工程
 
 可以直接用mkdocs的命令：
+
 ```
 mkdocs new my-project
 cd my-project
 ```
 
 生成的目录结构如下：
+
 ```
 xxx
 ├── docs
@@ -39,11 +41,13 @@ xxx
 ```
 
 mkdocs.yml是配置文件，默认的配置项只有一个site_name：
+
 ```
 site_name: My Docs
 ```
 
 index.md的内容是一个mkdocs的使用说明：
+
 ```
 # Welcome to MkDocs
 
@@ -79,6 +83,7 @@ For full documentation visit [mkdocs.org](http://mkdocs.org).
 更多的配置项参考[官方文档](http://www.mkdocs.org/user-guide/configuration/)。
 
 我们的一个工程是这么设置的：
+
 ```
 site_name: 基于Hyperledger的基金管理
 site_url: https://wutongtree.github.io/funds/
@@ -113,6 +118,7 @@ copyright: Copyright &copy; 2014-2016 <a href="https://wutongtree.com" target="_
 ## 0x04 本地测试
 
 运行命令：
+
 ```
 mkdocs serve
 ```
@@ -122,6 +128,7 @@ mkdocs serve
 ## 0x05 生成静态网页
 
 运行命令：
+
 ```
 mkdocs build
 ```
@@ -131,6 +138,7 @@ mkdocs build
 ## 0x06 解析没有在pages列表中的页面
 
 官方的版本中，没有在mkdocs.yml配置文件的pages选项中出现过的页面不会转换为静态页面，也不能被其他页面链接。类似这样的错误或者警告：
+
 ```
 WARNING -  The page "hyperledger/index.md" contained a hyperlink to "hyperledger/chaincode.md" which is not listed in the "pages" configuration.
 ```
@@ -140,6 +148,7 @@ WARNING -  The page "hyperledger/index.md" contained a hyperlink to "hyperledger
 可是有的链接我确实不需要出现在导航栏，直接出现在页面的链接中就好了，否则我增加一个页面就要增加一个导航页面，文章多了就比较麻烦了。
 
 如果你也需要这个功能，可以用我们修改的一个版本：
+
 ```
 git clone https://github.com/wutongtree/mkdocs.git
 cd mkdocs
@@ -151,6 +160,7 @@ sudo python setup.py install
 ## 0x07 错误
 
 如果发现错误：
+
 ```
 Traceback (most recent call last):
   File "/usr/local/bin/mkdocs", line 11, in <module>
@@ -188,7 +198,8 @@ Traceback (most recent call last):
 ImportError: Failed loading extension 'mdx_math' from 'mdx_math', 'markdown.extensions.mdx_math' or 'mdx_mdx_math'
 ```
 
-安装一下就可以了：
+安装一下缺的库就可以了：
+
 ```
 sudo pip install python-markdown-math
 ```
