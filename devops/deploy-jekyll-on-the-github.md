@@ -24,7 +24,7 @@ title: Blogging Like a Hacker
 
 当然，这也是Jekyll比较强大的地方，Markdown文件里面还可以加入很多模版的内容，展示出来的效果非常好，基本上可以满足中小型网站的需要。
 
-如果想不修改一点Markdown文档的内容，就能有一个类似的网站系统，可以参考[MkDocs](http://www.mkdocs.org/)，一个Python实现工具，使用方法超级简单，具体的介绍参考[使用MkDocs管理你的CMS系统](./manage-your-cms-using-mkdocs)。
+如果想不修改一点Markdown文档的内容，就能有一个类似的网站系统，可以参考[MkDocs](http://www.mkdocs.org/)，一个Python实现的工具，使用方法超级简单，具体的介绍参考[使用MkDocs管理你的CMS系统](./manage-your-cms-using-mkdocs)。
 
 ## 0x01 注册Github账户并创建一个repository
 
@@ -155,7 +155,65 @@ assign pages_list = site.data.pages
 
 可以把代码改的复杂点，如果你愿意的话。
 
-## 0x04 一些Jekyll实现的网站
+## 0x04 编写文章
+Jekyll发布的文章都需要带着Front Matter，可以用两种方法：
+* 一种是用Jekyll-Bootstrap里面写好的Ruby Makefile - rake
+
+```
+rake post title="Hello World"
+```
+这种方式创建的文章会自带创建时间，文件名格式是：2016-09-03-hello-world.md，存放在_post目录下，生成的文件自带文件头：
+```
+---
+layout: post
+title: "Hello World"
+description: ""
+category:
+tags: []
+---
+{% include JB/setup %}
+```
+
+这种方式发布的文章是类似博客系统，安装时间顺序进行排列，没有进行归类，我是用下面的方法。
+
+* 自己写文件头
+
+为了比较好的对文档进行归类，做成类似wiki的系统，可以在repository的根目录下创建分类目录，然后里面手动创建文件，拷贝上面生成的文件头，不过layout需要修改一下，我用的是page，这样文件名就不用带时间格式了，比如resources/index.md：
+```
+---
+layout: page
+title: "网络资源"
+description: ""
+group: navigation
+---
+{% include JB/setup %}
+
+## 技术类
+* [Hyperledger fabric](https://gerrit.hyperledger.org)
+* [NXT白皮书中文版](../NXT白皮书中文译本.pdf)
+* [PoX的战争——区块链技术在金融工具中的应用](../PoX的战争.pdf)
+
+## 产品类
+* [Hyperledger](https://www.hyperledger.org/)
+
+## 视频类
+* [Blockchain in a Global Context](https://coindesk.wistia.com/medias/rtitd3kev2)
+
+## 新闻类
+* [CoinDesk](http://www.coindesk.com/)
+```
+
+这样除了文件头，其他都是原生的Markdown文件，然后再把生成的文章链接到Navigation对应的页面上，现在是手动更新的，如果要做做更多的自动化，可以修改Rakefile或者自己写脚本来实现。
+
+## 0x05 发布文章
+直接在工程的根目录下运行jekyll命令就可以生成静态的网站了，然后再发布到Github上就可以了：
+```
+jekyll build
+git commit -am "xxx"
+git push origin
+```
+
+## 0x06 一些Jekyll实现的网站
 这里有一堆的列表：
 * [GitHub Pages examples](https://github.com/showcases/github-pages-examples)
 
@@ -163,5 +221,5 @@ assign pages_list = site.data.pages
 * [bootstrap](https://github.com/twbs/bootstrap)
 * [Github training](https://github.com/github/training-kit/)
 
-## 0x10 未完待续
-还有一些功能没有做尝试，比如每个Pages根据某个category自动生成列表等。
+## 0xFF 未完待续
+还有一些功能没有做尝试，比如每个Pages根据某个category自动生成列表、加上目录导航等。

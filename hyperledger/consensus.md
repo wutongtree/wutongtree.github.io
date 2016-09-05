@@ -1,7 +1,7 @@
 ---
-layout: default
+layout: page
 title: 共识算法
-tagline: 导航
+tagline: 区块链实用手册
 ---
 {% include JB/setup %}
 

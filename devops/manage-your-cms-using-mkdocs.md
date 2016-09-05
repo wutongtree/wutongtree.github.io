@@ -5,163 +5,193 @@ description: ""
 ---
 {% include JB/setup %}
 
-## 0x00 关于Jekyll和Github Pages
-Github作为一个托管代码的平台，还提供了介绍项目的功能，这个功能扩展出来就是一个静态网站的托管平台，就叫Github Pages。Github本身支持Markown文件解析展示，不过这个功能比较简单，有很多工具可以实现把较多的Markdown文件组织转换成静态网站，Github官方推荐的就是Jekyll。Github本身又对托管的代码有版本控制的功能，所以能够实现通过Markdown编辑文档，然后Git管理这些文档并进行发布。
+## 0x00 关于Sphinx和MkDocs
+托管文档除了[用Jekyll管理你的Github Pages](./deploy-jekyll-on-the-github)外，<https://readthedocs.org/>也是使用的非常多，上面托管的文档用[Sphinx](http://www.sphinx-doc.org/)构建的比较多，文档也是比较复杂的，这里我们介绍一个非常好用的工具：[MkDocs](http://www.mkdocs.org/)。
 
-使用Jekyll的方式有多种：
-* 最原始的方法就是自己写所有的文件，可以参考阮一峰写的[搭建一个免费的，无限流量的Blog----github Pages和Jekyll入门](http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html)。
-* 可以参考Github的文档，介绍的比较详细，[Using Jekyll as a static site generator with GitHub Pages](https://help.github.com/articles/using-jekyll-as-a-static-site-generator-with-github-pages/)，采用[Bundler](http://bundler.io/)来管理Ruby的依赖，可以进行本身预览或者生成静态网页。
-* 采用[Jekyll-Bootstrap](http://jekyllbootstrap.com/)，我们这里就是用的它，但是默认的操作方式会有Bug，CSS文件显示会有问题，后面我会写解决办法。
-* 当然还可以用别人做好的模版，拿来改改也可以用 ^_^。
+MkDocs是研究Hyperledger的时候发现的一个工具，使用方法和配置都非常的简单，能够不用太关心建站的事情，能够聚焦到文档本身，看这个文章的长短就知道了。
 
-至于为什么要用Markdown来写文档，除了它比较流行支持的平台比较多之外，更重要的还是它内在的好处，就是能够聚焦到内容本身，并且可移植，就像MVC框架一样，M和C的时候不需要太多的关注V的内容。其实Jekyll还是需要修改一点Markdown文件本身的，至少需要加上Front Matter，这是YAML格式编写的文件头，Jekyll通过识别它进行展示，像下面这样：
+## 0x01 安装和使用MkDocs
+
+以下的操作步骤都按最简单的写，详细一点的配置参考[官方文档](http://www.mkdocs.org/)。
+
+* 安装MkDocs
+
 ```
----
-layout: post
-title: Blogging Like a Hacker
----
+pip install mkdocs
 ```
 
-当然，这也是Jekyll比较强大的地方，Markdown文件里面还可以加入很多模版的内容，展示出来的效果非常好，基本上可以满足中小型网站的需要。
+* 创建文档工程
 
-如果想不修改一点Markdown文档的内容，就能有一个类似的网站系统，可以参考[MkDocs](http://www.mkdocs.org/)，一个Python实现工具，使用方法超级简单，具体的介绍参考[使用MkDocs管理你的CMS系统](./manage-your-cms-using-mkdocs)。
-
-## 0x01 注册Github账户并创建一个repository
-
-注册账户和创建repository比较简单，访问<https://github.com/>上操作就可以了。生成的工程名称可以是个人的，也可以创建组织，然后工程名称就是工程的域名了。比如我们的organization是wutongtree，所以repository路径就是：https://github.com/wutongtree/xxx，我们创建的repository名称是wutongtree.github.io。创建完成以后可以在repository的Settings里面找到Github Pages进行设置，默认的访问地址就是username.github.io/repository。
-
-## 0x02 安装并使用Jekyll-Bootstrap
-* 安装Jekyll
-
-安装Jekyll最简单的方式就是通过RubyGems：
+可以直接用mkdocs的命令：
 ```
-gem install jekyll
+mkdocs new my-project
+cd my-project
 ```
 
-* 用Jekyll-Bootstrap初始化刚创建的repository
-
-记得替换下面的repository：
+生成的目录结构如下：
 ```
-git clone https://github.com/plusjade/jekyll-bootstrap.git wutongtree.github.io
-cd wutongtree.github.io
-git remote set-url origin git@github.com:wutongtree/wutongtree.github.io.git
-```
+xxx
+├── docs
+│   └── index.md
+└── mkdocs.yml
 
-* 增加或者切换主题
-
-从Github上下载的Jekyll-Bootstrap是没有bootstrap-3这个theme的，但是_layout用的却是bootstrap-3，所以直接运行的话样式是不对的，控制台会报错：
-```
-[2016-09-02 23:30:55] ERROR `/assets/themes/bootstrap-3/bootstrap/css/bootstrap-theme.min.css' not found.
-[2016-09-02 23:30:55] ERROR `/assets/themes/bootstrap-3/bootstrap/css/bs-sticky-footer.css' not found.
-[2016-09-02 23:30:55] ERROR `/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js' not found.
-[2016-09-02 23:30:55] ERROR `/assets/themes/bootstrap-3/css/style.css' not found.
-[2016-09-02 23:30:55] ERROR `/assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css' not found.
-[2016-09-02 23:30:55] ERROR `/assets/themes/bootstrap-3/bootstrap/js/bootstrap.min.js' not found.
+1 directory, 2 files
 ```
 
-有两个办法解决这个问题：
-* 切换主题
-
-比如我用的twitter：
+mkdocs.yml是配置文件，默认的配置项只有一个site_name：
 ```
-rake theme:switch name="twitter"
+site_name: My Docs
 ```
 
-* 增加主题
+index.md的内容是一个mkdocs的使用说明：
+```
+# Welcome to MkDocs
 
-如果还是想用bootstrap-3，可以增加主题：
-```
-rake theme:install git=https://github.com/jekyll-bootstrap-3/bootstrap-theme
-```
-会提示是否要切换到新主题。
+For full documentation visit [mkdocs.org](http://mkdocs.org).
 
-* 本地测试
+## Commands
 
-解决了主题的问题以后就可以本地测试一下看看效果了：
-```
-jekyll serve
-```
-打开<http://localhost:4000>就可以看到默认页面了
+* `mkdocs new [dir-name]` - Create a new project.
+* `mkdocs serve` - Start the live-reloading docs server.
+* `mkdocs build` - Build the documentation site.
+* `mkdocs help` - Print this help message.
 
-## 0x03 调整Navigation的顺序
-导航栏默认的排列顺序是按页面URL的字母顺序排列的，这个和预期的要求不一样。实现的方法有多种：
-* 给Pages页增加权重或者顺序
+## Project layout
 
-在页面的Front Matter上增加一个字段，比如下面的weight：
-```
----
-layout: page
-title : Archive
-header : Post Archive
-group: navigation
-weight: 1
----
-```
+    mkdocs.yml    # The configuration file.
+    docs/
+        index.md  # The documentation homepage.
+        ...       # Other markdown pages, images and other files.
+```   
 
-然后修改用到的theme对应的default.html文件，比如：_includes/themes/twitter/default.html，找到
-```
-assign pages_list = site.pages
-```
-修改为：
-```
-assign pages_list = site.pages | sort:"weight"
-```
+* 配置MkDocs
 
-这种方式需要手动的给每个Pages页面加一个权重，如果要调整需要需要去每个文件改。
+直接修改mkdocs.yml就可以，比如：
+  - site_name：站点的名称
+    比如我们的是这么设置的：
+  - pages: 导航页面
+  - theme: 站点主题
+  - docs_dir: Markdown文档目录
+  - site_dir: 生成的静态网页目录
+  - dev_addr: 本地调试的监听地址和端口
+  - markdown_extensions: 一些扩展
 
-* 利用Jekyll内置的序号
+更多的配置项参考[官方文档](http://www.mkdocs.org/user-guide/configuration/)。
 
-直接修改每个Pages页面的需要，比如：
+我们的一个工程是这么设置的：
 ```
-01_categories.html
-02_archive.html
-```
-这样，01_categories.html就会排在前面，不过URL里面是带着这个序号的，看着不舒服。
+site_name: 基于Hyperledger的基金管理
+site_url: https://wutongtree.github.io/funds/
+theme: simplex
+site_description: '基于Hyperledger的基金管理'
 
-* 手动排列页面的顺序
+docs_dir: markdowns
+site_dir: docs
 
-专门用一个页面来排列顺序，比如增加一个_data目录，在这个目录下增加一个pages.yml文件，内容如下：
-```
-- url: /hyperledger
-  title: Hyperledger源码分析
-  group: navigation
-- url: /devops
-  title: 动手实战
-  group: navigation
-- url: /translations
-  title: 原创翻译
-  group: navigation
-- url: /news
-  title: 行业动态
-  group: navigation
-- url: /resources
-  title: 网络资源
-  group: navigation
+pages:
+- 首页: index.md
+- 功能描述: requirements.md
+- 设计实现: designs.md
+- 安装部署: deploy.md
+
+markdown_extensions:
+  - extra
+  - tables
+  - toc
+  - fenced_code
+  - smarty
+  - mdx_math:
+      enable_dollar_delimiter: True
+  - footnotes
+
+copyright: Copyright &copy; 2014-2016 <a href="https://wutongtree.com" target="_blank">wutongtree.com</a>
 ```
 
-然后修改用到的theme对应的default.html文件，找到
+## 0x03 写文章
+直接在docs目录下写Markdown文档就可以，也可以创建子目录，方便文档管理。 MkDocs对Markdown文档没有侵入性，完全按照标准的格式写就可以了，不像[Jekyll](./deploy-jekyll-on-the-githu)一样需要加一些文件头什么的，文档的链接也可以直接链接原始的Markdown文档，最终生成静态网页的时候会替换成最终的html页面。
+
+## 0x04 本地测试
+
+运行命令：
 ```
-assign pages_list = site.pages
+mkdocs serve
 ```
 
-修改为：
+然后打开链接<http://127.0.0.1:8000>就可以预览了，它会监控本地页面的修改，所以一边改一边就能看到最终的效果了。
+
+## 0x05 生成静态网页
+
+运行命令：
 ```
-assign pages_list = site.data.pages
+mkdocs build
 ```
 
-这种方式的好处是对展示页面统一管理，比较方便，还可以隐藏部分页面。
+就会在site目录下看到生成的静态网页了，可以托管到任何一个空间服务商那里了。这个目录也是可以修改的，比如Github Pages用的docs目录，就可以在MkDocs里面改下。
 
-* 其他办法
+## 0x06 解析没有在pages列表中的页面
 
-可以把代码改的复杂点，如果你愿意的话。
+官方的版本中，没有在mkdocs.yml配置文件的pages选项中出现过的页面不会转换为静态页面，也不能被其他页面链接。类似这样的错误或者警告：
+```
+WARNING -  The page "hyperledger/index.md" contained a hyperlink to "hyperledger/chaincode.md" which is not listed in the "pages" configuration.
+```
 
-## 0x04 一些Jekyll实现的网站
-这里有一堆的列表：
-* [GitHub Pages examples](https://github.com/showcases/github-pages-examples)
+这其实是他们的设计，因为他们还专门有一个选项[strict](http://www.mkdocs.org/user-guide/configuration/#strict)来说这个事情，如果有这种链接错误的话，要不要终止构建啊 :(
 
-个人比较喜欢的：
-* [bootstrap](https://github.com/twbs/bootstrap)
-* [Github training](https://github.com/github/training-kit/)
+可是有的链接我确实不需要出现在导航栏，直接出现在页面的链接中就好了，否则我增加一个页面就要增加一个导航页面，文章多了就比较麻烦了。
 
-## 0x10 未完待续
-还有一些功能没有做尝试，比如每个Pages根据某个category自动生成列表等。
+如果你也需要这个功能，可以用我们修改的一个版本：
+```
+git clone https://github.com/wutongtree/mkdocs.git
+cd mkdocs
+sudo python setup.py install
+```
+
+修改的版本已经给官方提交了pull request，估计是不会通过的 :)
+
+## 0x07 错误
+
+如果发现错误：
+```
+Traceback (most recent call last):
+  File "/usr/local/bin/mkdocs", line 11, in <module>
+    sys.exit(cli())
+  File "/Library/Python/2.7/site-packages/click/core.py", line 716, in __call__
+    return self.main(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/click/core.py", line 696, in main
+    rv = self.invoke(ctx)
+  File "/Library/Python/2.7/site-packages/click/core.py", line 1060, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/Library/Python/2.7/site-packages/click/core.py", line 889, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/Library/Python/2.7/site-packages/click/core.py", line 534, in invoke
+    return callback(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/mkdocs/__main__.py", line 137, in build_command
+    ), clean_site_dir=clean)
+  File "/Library/Python/2.7/site-packages/mkdocs/commands/build.py", line 289, in build
+    build_pages(config)
+  File "/Library/Python/2.7/site-packages/mkdocs/commands/build.py", line 249, in build_pages
+    dump_json)
+  File "/Library/Python/2.7/site-packages/mkdocs/commands/build.py", line 169, in _build_page
+    site_navigation=site_navigation
+  File "/Library/Python/2.7/site-packages/mkdocs/commands/build.py", line 35, in convert_markdown
+    extension_configs=config['mdx_configs']
+  File "/Library/Python/2.7/site-packages/mkdocs/utils/__init__.py", line 337, in convert_markdown
+    extension_configs=extension_configs or {}
+  File "/Library/Python/2.7/site-packages/markdown/__init__.py", line 159, in __init__
+    configs=kwargs.get('extension_configs', {}))
+  File "/Library/Python/2.7/site-packages/markdown/__init__.py", line 185, in registerExtensions
+    ext = self.build_extension(ext, configs.get(ext, {}))
+  File "/Library/Python/2.7/site-packages/markdown/__init__.py", line 264, in build_extension
+    module = importlib.import_module(module_name_old_style)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+ImportError: Failed loading extension 'mdx_math' from 'mdx_math', 'markdown.extensions.mdx_math' or 'mdx_mdx_math'
+```
+
+安装一下就可以了：
+```
+sudo pip install python-markdown-math
+```
+
+## 0xFF 总结
+MkDocs非常适合不关心页面的程序员写文档了，主题也比较多，展示效果还是不错的。

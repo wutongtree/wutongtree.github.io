@@ -127,7 +127,7 @@ title: Blogging Like a Hacker
 
 <p>当然，这也是Jekyll比较强大的地方，Markdown文件里面还可以加入很多模版的内容，展示出来的效果非常好，基本上可以满足中小型网站的需要。</p>
 
-<p>如果想不修改一点Markdown文档的内容，就能有一个类似的网站系统，可以参考<a href="http://www.mkdocs.org/">MkDocs</a>，一个Python实现工具，使用方法超级简单，具体的介绍参考<a href="./manage-your-cms-using-mkdocs">使用MkDocs管理你的CMS系统</a>。</p>
+<p>如果想不修改一点Markdown文档的内容，就能有一个类似的网站系统，可以参考<a href="http://www.mkdocs.org/">MkDocs</a>，一个Python实现的工具，使用方法超级简单，具体的介绍参考<a href="./manage-your-cms-using-mkdocs">使用MkDocs管理你的CMS系统</a>。</p>
 
 <h2 id="x01-githubrepository">0x01 注册Github账户并创建一个repository</h2>
 
@@ -265,7 +265,67 @@ weight: 1
 
 <p>可以把代码改的复杂点，如果你愿意的话。</p>
 
-<h2 id="x04-jekyll">0x04 一些Jekyll实现的网站</h2>
+<h2 id="x04-">0x04 编写文章</h2>
+<p>Jekyll发布的文章都需要带着Front Matter，可以用两种方法：</p>
+<ul>
+  <li>一种是用Jekyll-Bootstrap里面写好的Ruby Makefile - rake</li>
+</ul>
+
+<pre><code>rake post title="Hello World"
+</code></pre>
+<p>这种方式创建的文章会自带创建时间，文件名格式是：2016-09-03-hello-world.md，存放在_post目录下，生成的文件自带文件头：</p>
+<pre><code>---
+layout: post
+title: "Hello World"
+description: ""
+category:
+tags: []
+---
+
+
+</code></pre>
+
+<p>这种方式发布的文章是类似博客系统，安装时间顺序进行排列，没有进行归类，我是用下面的方法。</p>
+
+<ul>
+  <li>自己写文件头</li>
+</ul>
+
+<p>为了比较好的对文档进行归类，做成类似wiki的系统，可以在repository的根目录下创建分类目录，然后里面手动创建文件，拷贝上面生成的文件头，不过layout需要修改一下，我用的是page，这样文件名就不用带时间格式了，比如resources/index.md：</p>
+<pre><code>---
+layout: page
+title: "网络资源"
+description: ""
+group: navigation
+---
+
+
+
+## 技术类
+* [Hyperledger fabric](https://gerrit.hyperledger.org)
+* [NXT白皮书中文版](../NXT白皮书中文译本.pdf)
+* [PoX的战争——区块链技术在金融工具中的应用](../PoX的战争.pdf)
+
+## 产品类
+* [Hyperledger](https://www.hyperledger.org/)
+
+## 视频类
+* [Blockchain in a Global Context](https://coindesk.wistia.com/medias/rtitd3kev2)
+
+## 新闻类
+* [CoinDesk](http://www.coindesk.com/)
+</code></pre>
+
+<p>这样除了文件头，其他都是原生的Markdown文件，然后再把生成的文章链接到Navigation对应的页面上，现在是手动更新的，如果要做做更多的自动化，可以修改Rakefile或者自己写脚本来实现。</p>
+
+<h2 id="x05-">0x05 发布文章</h2>
+<p>直接在工程的根目录下运行jekyll命令就可以生成静态的网站了，然后再发布到Github上就可以了：</p>
+<pre><code>jekyll build
+git commit -am "xxx"
+git push origin
+</code></pre>
+
+<h2 id="x06-jekyll">0x06 一些Jekyll实现的网站</h2>
 <p>这里有一堆的列表：</p>
 <ul>
   <li><a href="https://github.com/showcases/github-pages-examples">GitHub Pages examples</a></li>
@@ -277,8 +337,8 @@ weight: 1
   <li><a href="https://github.com/github/training-kit/">Github training</a></li>
 </ul>
 
-<h2 id="x10-">0x10 未完待续</h2>
-<p>还有一些功能没有做尝试，比如每个Pages根据某个category自动生成列表等。</p>
+<h2 id="xff-">0xFF 未完待续</h2>
+<p>还有一些功能没有做尝试，比如每个Pages根据某个category自动生成列表、加上目录导航等。</p>
 
   </div>
 </div>
