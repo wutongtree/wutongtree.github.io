@@ -65,6 +65,7 @@ git remote set-url origin git@github.com:wutongtree/wutongtree.github.io.git
 ```
 
 有两个办法解决这个问题：
+
 * 切换主题
 
 比如我用的twitter：
