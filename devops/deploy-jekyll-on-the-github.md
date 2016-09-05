@@ -153,11 +153,13 @@ assign pages_list = site.pages | sort:"weight"
 ```
 
 然后修改用到的theme对应的default.html文件，找到
+
 ```
 assign pages_list = site.pages
 ```
 
 修改为：
+
 ```
 assign pages_list = site.data.pages
 ```
@@ -231,9 +233,11 @@ git push origin
 
 ## 0x06 一些Jekyll实现的网站
 这里有一堆的列表：
+
 * [GitHub Pages examples](https://github.com/showcases/github-pages-examples)
 
 个人比较喜欢的：
+
 * [bootstrap](https://github.com/twbs/bootstrap)
 * [Github training](https://github.com/github/training-kit/)
 
