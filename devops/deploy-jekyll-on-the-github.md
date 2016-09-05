@@ -33,7 +33,7 @@ title: Blogging Like a Hacker
 注册账户和创建repository比较简单，访问<https://github.com/>上操作就可以了。生成的工程名称可以是个人的，也可以创建组织，然后工程名称就是工程的域名了。比如我们的organization是wutongtree，所以repository路径就是：https://github.com/wutongtree/xxx，我们创建的repository名称是wutongtree.github.io。创建完成以后可以在repository的Settings里面找到Github Pages进行设置，默认的访问地址就是username.github.io/repository。
 
 ## 0x02 安装并使用Jekyll-Bootstrap
-* 安装Jekyll
+### 安装Jekyll
 
 安装Jekyll最简单的方式就是通过RubyGems：
 
@@ -41,7 +41,7 @@ title: Blogging Like a Hacker
 gem install jekyll
 ```
 
-* 用Jekyll-Bootstrap初始化刚创建的repository
+### 用Jekyll-Bootstrap初始化刚创建的repository
 
 记得替换下面的repository：
 
@@ -51,7 +51,7 @@ cd wutongtree.github.io
 git remote set-url origin git@github.com:wutongtree/wutongtree.github.io.git
 ```
 
-* 增加或者切换主题
+### 增加或者切换主题
 
 从Github上下载的Jekyll-Bootstrap是没有bootstrap-3这个theme的，但是_layout用的却是bootstrap-3，所以直接运行的话样式是不对的，控制台会报错：
 
@@ -83,7 +83,7 @@ rake theme:install git=https://github.com/jekyll-bootstrap-3/bootstrap-theme
 ```
 会提示是否要切换到新主题。
 
-* 本地测试
+### 本地测试
 
 解决了主题的问题以后就可以本地测试一下看看效果了：
 
