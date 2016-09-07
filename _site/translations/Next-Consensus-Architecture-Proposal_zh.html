@@ -292,7 +292,7 @@
 
 <p><strong>备注</strong>：<em>注意后面的协议并不假定所有的交易都是确定性的，允许不确定性的交易</em>。</p>
 
-<h3 id="section-4">2.1. 客户端创建一个交易并自己选择发送给提交伙伴</h3>
+<h3 id="section-4">2.1. 客户端创建一个交易并发送给自己选择的一个提交伙伴</h3>
 
 <p>要调用一个交易，客户端发送如下的消息给提交伙伴<code>spID</code>。</p>
 
@@ -336,6 +336,166 @@
 <p>TODO：确定是否要在客户端显示的包含本地/逻辑时间（时间戳）。</p>
 
 <h3 id="section-5">2.2. 提交伙伴准备一个交易并发送给背书者获取背书</h3>
+
+<p>提交伙伴收到客户端发来的<code>&lt;SUBMIT,tx,retryFlag&gt;</code>消息后，首先要验证客户端的签名<code>clientSig</code>，然后就准备交易。提交伙伴会临时的<em>执行</em>交易（<code>txPayload</code>），过程是通过执行交易关联（<code>chaincodeID</code>）的链码和拷贝提交伙伴本地保存的状态。</p>
+
+<p>执行的结果，提交伙伴计算<em>状态更新</em>（<code>stateUpdate</code>）和<em>版本依赖</em>（<code>verDep</code>），这在DB语言中又叫<em>MVCC+postimage</em>。</p>
+
+<p>还记得状态是键/值对（k/v）组成的吧。所有的k/v记录都是版本化的，就是说，每个记录都包含排过序的版本信息，每个键更新的时候都会递增版本信息。伙伴解析链码访问的交易记录键值对，可以读可以写，它还没有更新这个状态。更具体的说：</p>
+
+<ul>
+  <li><code>verDep</code>是一个元组<code>verDep=(readset,writeset)</code>。给定提交伙伴执行交易前的一个状态<code>s</code>：
+    <ul>
+      <li>对交易读取的每个键<code>k</code>，把<code>(k,s(k).version)</code>加入到<code>readset</code>中。</li>
+      <li>对交易修改的每个键<code>k</code>，把<code>(k,s(k).version)</code>加入到<code>writeset</code>中。</li>
+    </ul>
+  </li>
+  <li>另外，对交易修改的每个键<code>k</code>的新值<code>v'</code>，把<code>(k,v')</code>加入到<code>stateUpdate</code>中。<code>v'</code>也可以是新值相对旧值<code>s(k).value</code>的增量。</li>
+</ul>
+
+<p>实际的实现可以把<code>verDep.writeset</code>和<code>stateUpdate</code>放到同一个数据结构中。</p>
+
+<p>然后，<code>tran-proposal := (spID,chaincodeID,txContentBlob,stateUpdate,verDep)</code>，其中：<code>txContentBlob</code>是链码/交易相关的信息，目的是能标识<code>tx</code>（比如，<code>txContentBlob=tx.txPayload</code>）。更详细的信息第6部分会介绍。</p>
+
+<p>所有节点都会用<code>tran-proposal</code>的加密哈希来作唯一交易标识符<code>tid</code>（比如：<code>tid=HASH(tran-proposal)</code>）。</p>
+
+<p>然后提交伙伴就把交易（<code>tran-proposal</code>）发送给链码的背书者。背书伙伴的选择是根据解析策略来的，还要看伙伴的可用性和提交伙伴的连通性。比如，可以把交易发送给指定<code>chaincodeID</code><em>所有</em>的背书者。这有可能，有的背书者是离线的，还有一些会拒绝对交易进行背书。提交伙伴尽量用可用的背书者满足策略要求。</p>
+
+<p>提交伙伴<code>spID</code>给背书伙伴<code>epID</code>发送的交易消息是：</p>
+
+<p><code>&lt;PROPOSE,tx,tran-proposal&gt;</code>。</p>
+
+<p><strong>可能的优化</strong>：实现上可以优化下<code>tx.chaincodeID</code>和<code>tran-proposal.chaincodeID</code>里重复的<code>chaincodeID</code>，<code>tx.txPayload</code>和<code>tran-proposal.txContentBlob</code>里重复的<code>txPayload</code>。</p>
+
+<p>最后，提交伙伴在内存中保存<code>tran-proposal</code>和<code>tid</code>，等待背书伙伴的回复。</p>
+
+<p><strong>其他设计</strong>：<em>这里提交伙伴和背书伙伴是直接通信的。这可以是共识服务的一个功能，这种情况下，需要确定faric要不要原子广播交付保证还是直接用简单的p2p通信。这样共识服务也要负责根据策略收集背书再发送给提交伙伴</em>。</p>
+
+<p>TODO：需要确定提交伙伴和背书伙伴之间的通信：用p2p还是通过共识服务。</p>
+
+<h3 id="section-6">2.3. 背书服务和给交易背书</h3>
+
+<p>链码<code>tran-proposal.chaincodeID</code>对应的背书伙伴收到通过<code>PROPOSE</code>消息发送来的交易后，执行如下步骤：</p>
+
+<ul>
+  <li>
+    <p>背书者验证签名<code>tx.clientSig</code>，检查<code>tx.chaincodeID==tran-proposal.chaincodeID</code>。</p>
+  </li>
+  <li>
+    <p>背书者模拟交易（用<code>tx.txPayload</code>），验证状态更新和依赖信息都是正确的。如果所有的都是有效的，它就对<code>(TRANSACTION-VALID, tid)</code>进行数字签名，生成<code>epSig</code>。然后背书伙伴发送<code>&lt;TRANSACTION-VALID, tid,epSig&gt;</code>消息给提交伙伴（<code>tran-proposal.spID</code>）。</p>
+  </li>
+  <li>
+    <p>如果背书者模拟交易是失败了，有几种情况：</p>
+
+    <p>a. 如果背书者获取到的状态更新和<code>tran-proposal.stateUpdates</code>里的不一样，它就对<code>(TRANSACTION-INVALID, tid, INCORRECT_STATE)</code>进行签名并发送给提交伙伴。</p>
+
+    <p>b. 如果背书者发现了比<code>tran-proposal.verDeps</code>更新的数据版本，它就对<code>(TRANSACTION-INVALID, tid, STALE_VERSION)</code>进行签名并发送给提交伙伴。</p>
+
+    <p>c. 如果背书者因为其他的一些理由（内部的背书策略、交易错误等）不想对交易进行背书，它就对<code>(TRANSACTION-INVALID, tid, REJECTED)</code>进行签名并发送给提交伙伴。</p>
+  </li>
+</ul>
+
+<p>注意背书者在这一步还没有改变状态，状态的更新也不会写日志。</p>
+
+<p><strong>其他设计</strong>：<em>对无效交易，背书伙伴可以不通知提交伙伴，不用显示的发送<code>TRANSACTION-INVALID</code>通知，</em>。</p>
+
+<p><strong>其他设计</strong>：<em>背书伙伴把<code>TRANSACTION-VALID/TRANSACTION-INVALID</code>消息及其签名提交给共识服务</em>。</p>
+
+<p>TODO：确定采用上面的哪种设计。</p>
+
+<h3 id="section-7">2.4. 提交伙伴收集交易的背书并通过共识服务进行广播</h3>
+
+<p>提交伙伴等待接收足够的信息和对<code>(TRANSACTION-VALID, tid)</code>进行的签名，表明交易提议（transaction proposal）是有背书（可能包含它自己的签名）的。这个过程依赖背书策略（再看看第3部分）。如果满足背书策略，交易就有<code>背书</code>了，注意这会儿还没有成功交付。从背书伙伴收集到的有背书交易的签名就叫<em>背书（endorsement）</em>，提交伙伴把它们存储到<code>endorsement</code>里。</p>
+
+<p>如果提交伙伴没有收集到交易提议的背书，它就丢弃掉这个交易并通知提交客户端。如果提交客户端设置（看步骤1和<code>SUBMIT</code>消息）了<code>retryFlag</code>，提交伙伴可能（根据提交伙伴的策略）会对交易进行重试（步骤2）。</p>
+
+<p>对一个有效背书的交易，我们开始使用consensus-fabric。提交伙伴使用<code>broadcast(blob)</code>调用共识服务，其中<code>blob=(tran-proposal, endorsement)</code>。</p>
+
+<h3 id="section-8">2.5. 共识服务给伙伴发布交易</h3>
+
+<p>当出现一个<code>deliver(seqno, prevhash, blob)</code>事件，一个伙伴更新所有序号小于<code>seqno</code>消息的状态，过程是这样的：</p>
+
+<ul>
+  <li>
+    <p>伙伴根据链码（<code>blob.tran-proposal.chaincodeID</code>）的策略检查<code>blob.endorsement</code>是否有效（这个步骤可以不用等到序号小于<code>seqno</code>的状态更新这个时候）。</p>
+  </li>
+  <li>
+    <p>伙伴同时验证依赖<code>blob.tran-proposal.verDep</code>是有效的。</p>
+  </li>
+</ul>
+
+<p>根据状态更新选择的一致性内容（consistency property）或者“隔离保证（isolation guarantee）”不同，依赖验证有多种实现方式。比如，<strong>可串行性（serializability）</strong>可以要求每个<code>readset</code>和<code>writeset</code>里键对应的版本号必须和状态里面键的版本号相同，丢掉不能满足这个要求的交易。另外一个例子，<strong>快照隔离（snapshot isolation ）</strong>要求<code>writeset</code>里所有的键，状态里的键和依赖数据里的版本号都一样。数据库要求更多的隔离保证。</p>
+
+<p>TODO：确定坚持可串行性还是允许链码指定隔离级别。</p>
+
+<ul>
+  <li>
+    <p>如果所有的检查都通过了，这个交易就被认为是<em>有效的（valid）</em>或者<em>已交付的（committed）</em>。这就是说，一个伙伴添加一个交易到总账上，然后会在区块链状态上执行<code>blob.tran-proposal.stateUpdates</code>。只有已交付的交易才会修改状态。</p>
+  </li>
+  <li>
+    <p>如果有检查失败了，交易就是无效的，伙伴会丢弃这个交易。重要的是要注意无效的交易是没有交付的，不会修改状态，也不会被记录。</p>
+  </li>
+</ul>
+
+<p>另外，提交伙伴会通知客户端丢弃的交易。如果提交客户端设置（看步骤1和<code>SUBMIT</code>消息）了<code>retryFlag</code>，提交伙伴可能（根据提交伙伴的策略）会对交易进行重试（步骤2）。</p>
+
+<p><img src="https://gerrit.hyperledger.org/r/gitweb?p=fabric.git;a=blob_plain;f=proposals/r1/flow-2.png" alt="交易流程图解" /></p>
+
+<p>图1. 交易流程图解（通用情况路径）</p>
+
+<hr />
+
+<h2 id="section-9">3. 背书策略</h2>
+
+<h3 id="section-10">3.1. 背书策略规范</h3>
+
+<p><strong>背书策略</strong>是对交易进行背书的<em>条件</em>。背书策略是链码安装的时候<code>deploy</code>交易指定的。只有根据策略进行背书的交易才是有效的。链码的调用交易会先获取链码策略的背书，否则是交付不了的。这是通过提交伙伴和背书伙伴之间的交互完成的，在第2部分已经介绍过了。</p>
+
+<p>形式上，背书策略是关于特定变量的断言。实际上，它可以是：</p>
+
+<ol>
+  <li>链码相关的键或者标识符（链码的元数据里面能找到），比如，背书者集合；</li>
+  <li>更多的链码元数据；</li>
+  <li>交易本身的元素；</li>
+  <li>可能还有其他的。</li>
+</ol>
+
+<p>背书策略断言的评估必须是确定性的。背书策略不能是复杂的，也不能是“小链码（mini chaincode）”。背书策略规范语言是有限制的，并且能够增加确定性。</p>
+
+<p>断言列表是由简单到丰富，复杂性是由易到难的。就是说，支持只有节点的键和标识符的策略是相对比较简单的。</p>
+
+<p>TODO：确定背书策略的参数。</p>
+
+<p>断言可能包含结果是TRUE或者FALSE的逻辑表达式。一般情况下，条件会用链码的背书伙伴对交易调用签发的数字签名。</p>
+
+<p>假链码指定了一个背书者集合<code>E = {Alice, Bob, Charlie, Dave, Eve, Frank, George}</code>，一些策略的示例：</p>
+
+<ul>
+  <li>
+    <p>E集合所有元素的有效签名。</p>
+  </li>
+  <li>
+    <p>E集合任意一个元素的有效签名。</p>
+  </li>
+  <li>
+    <p>满足<code>(Alice OR Bob) AND (any two of: Charlie, Dave, Eve, Frank, George)</code>这个条件的背书伙伴的有效签名。</p>
+  </li>
+  <li>
+    <p>7个背书者中任意5个的有效签名。（更通用的情况是，有<code>n &gt; 3f</code>个背书者的链码，需要<code>n</code>个背书者中有<code>2f+1</code>个有有效签名，或者任意一个<em>超过</em><code>(n+f)/2</code>个背书者的组有有效签名。）。</p>
+  </li>
+  <li>
+    <p>假设背书者都有一个“投注”或者“权重”，比如<code>{Alice=49, Bob=15, Charlie=15, Dave=10, Eve=7, Frank=3, George=1}</code>，总投注是100：策略要求多数投注集合的有效签名（比如，一个总投注严格大于50的组），只要和George的<code>X</code>不一样的<code>{Alice, X}</code>，或者{everyone together except Alice}等等。</p>
+  </li>
+  <li>
+    <p>上面的例子里投注可以是静态的（链码的元数据里写死的）或者动态的（比如，依赖链码的状态并且可以在执行过程中修改）。</p>
+  </li>
+</ul>
+
+<p>这些策略能起到多少作用还依赖应用程序，对背书者错误或者捣乱需要的恢复力，还有其他不同的属性。</p>
+
+<h3 id="section-11">3.2. 实现</h3>
+
+<p>一般情况，背书策略都。</p>
 
   </div>
 </div>
