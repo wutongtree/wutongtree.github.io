@@ -614,7 +614,7 @@
 
 <ul>
   <li>
-    <p><em>本地检查点有效性策略（Local (peer-specific) checkpoint validity policy (LCVP)，每个伙伴相关的）</em>。本地策略就是给定伙伴<code>p</code>可以指定一个伙伴集合，这个集合里的伙伴都是<code>p</code>信任的，他们的<code>CHECKPOINT</code>信息就足够构建一个有效的检查点。比如，伙伴<em>Alice</em>的LCVP定义的是，需要从<code>Bob</code>或者<em>同时收到Charlie和Dave</em>收到<code>CHECKPOINT</code>消息。</p>
+    <p><em>本地检查点有效性策略（Local (peer-specific) checkpoint validity 策略(LCVP)，每个伙伴相关的）</em>。本地策略就是给定伙伴<code>p</code>可以指定一个伙伴集合，这个集合里的伙伴都是<code>p</code>信任的，他们的<code>CHECKPOINT</code>信息就足够构建一个有效的检查点。比如，伙伴<em>Alice</em>的LCVP定义的是，需要从<code>Bob</code>或者<em>同时收到Charlie和Dave</em>收到<code>CHECKPOINT</code>消息。</p>
   </li>
   <li>
     <p><em>全局检查点有效性策略（Global checkpoint validity policy (GCVP)）</em>。检查点有效性策略可以是全局指定。除了设置粒度不同（GCVP设置粒度是系统（区块链），LCVP设置粒度是每个伙伴），GCVP和LCVP类似的。比如，GCVP可能会这么设置：</p>
@@ -647,6 +647,83 @@
 
 <h2 id="confidentiality">6. 机密性（Confidentiality）</h2>
 
+<p>这个部分介绍下这种架构怎么搞定那些要求敏感数据对某些伙伴保密的部署。</p>
+
+<p><strong>Fabic级别的机密性策略（Fabric-level confidentiality policies）</strong>。简言之，这种架构在<em>fabric</em>层提供了一定的机密性：</p>
+
+<ul>
+  <li>机密链码的背书者能够获取的明文信息：
+    <ul>
+      <li>链码部署交易有效载荷；</li>
+      <li>链码调用交易有效载荷；</li>
+      <li>链码状态和状态更新；</li>
+    </ul>
+  </li>
+  <li>其他伙伴是获取不到这些明文信息的。</li>
+</ul>
+
+<p>这里我们有一个假设，机密链码的背书集合里的背书者是链码创建者信任的，它们可以获取链码的资源和维护机密性。</p>
+
+<p>链码使用fabric机密性特性的程度是在部署阶段由部署者在<strong>机密性策略</strong>中指定的。具体来说，fabric提供如下机密性策略的支持：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>策略ID</th>
+      <th>部署有效载荷</th>
+      <th>调用有效载荷</th>
+      <th>状态更新</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>策略<code>000</code></td>
+      <td>不受限制的</td>
+      <td>不受限制的</td>
+      <td>不受限制的</td>
+    </tr>
+    <tr>
+      <td>策略<code>010</code></td>
+      <td>不受限制的</td>
+      <td>机密的</td>
+      <td>不受限制的</td>
+    </tr>
+    <tr>
+      <td>策略<code>011</code></td>
+      <td>不受限制的</td>
+      <td>机密的</td>
+      <td>机密的</td>
+    </tr>
+    <tr>
+      <td>策略<code>110</code></td>
+      <td>机密的</td>
+      <td>机密的</td>
+      <td>不受限制的</td>
+    </tr>
+    <tr>
+      <td>策略<code>111</code></td>
+      <td>机密的</td>
+      <td>机密的</td>
+      <td>机密的</td>
+    </tr>
+    <tr>
+      <td>策略* <code>0xx</code></td>
+      <td>不受限制的</td>
+      <td>任意的</td>
+      <td>任意的</td>
+    </tr>
+    <tr>
+      <td>策略* <code>1xx</code></td>
+      <td>机密的</td>
+      <td>任意的</td>
+      <td>任意的</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>表6.1.</strong> Fabric机密性策略</p>
+
+<p><em>机密的（Confidential）</em>指的是访问相应的交易内容（就是部署/调用有效载荷或者状态更新等）对背书节点是被限制的。<em>不受限制的（In-the-clear）</em>指的是所有伙伴都能读取或者访问相应的交易内容。<em>任意的（Any）</em>表明可以是<em>机密的（Confidential）</em>或者<em>不受限制的（In-the-clear）</em>。</p>
 
   </div>
 </div>
