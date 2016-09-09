@@ -453,3 +453,110 @@ TODO：形式化背书策略，设计具体的实现。
 **表6.1.** Fabric机密性策略
 
 *机密的（Confidential）*指的是访问相应的交易内容（就是部署/调用有效载荷或者状态更新等）对背书节点是被限制的。*不受限制的（In-the-clear）*指的是所有伙伴都能读取或者访问相应的交易内容。*任意的（Any）*表明可以是*机密的（Confidential）*或者*不受限制的（In-the-clear）*。
+
+下面的我们都假定部署交易的有效载荷（包括代码和应用数据/元数据）算是一个整体。但是，以后的设计规划里，我们会从机密性策略的角度把它们看成两个独立的部分。
+
+本文档后面的部分，一个`机密的`的*链码*是机密性策略和`000`不一样的链码。还有，我们假设每个伙伴都是有注册（加密）公钥的，[Hyperledger fabric协议规范](https://github.com/hyperledger/fabric/blob/master/docs/protocol-spec.md)里面有介绍。特别地，所有的伙伴都知道每个背书者`e`的公钥`ePubKey`，背书者自己知道对应的解密私钥。
+
+**免责声明**：
+
+*隐藏链码的交易活动*。重要的是要注意设计并没有隐藏链码标识符执行了哪些交易，也没有隐藏交易更新了链码状态哪个部分。就是说，交易和状态都是加密的，但是提交伙伴是能链接活动和状态变化的。链码创建者允许提交伙伴通知第三方链码活动，信任提交伙伴不会泄露这些信息。但是，我们在修订版的设计中准备修改它。
+
+*状态机密性的粒度*。设计现在把链码和它们的状态看成一个机密性域，不划分成不同的K/V项。可以在应用层给不同的状态部分设置不同的机密性策略，未来的目标是客户端的一个集合可以看到状态的某些部分，看不到其他部分。就是说，从架构上是不反对有这种保证的，在单个或者多个链码有足够的加密工具，应用层也是可以实现的。这会出现*链码层的机密性*。其他的要去，比如对提交伙伴隐藏背书者标识符和背书策略会在以后的设计迭代中处理。
+
+### 6.1 机密链码部署
+
+#### 6.1.1 创建一个部署交易
+
+要部署有机密性支持的链码`cc`，客户端（`cc`的部署者）部署`cc`需要设置：
+
+* 链码本身，包括源代码，包含在`chainCode`里相关的元数据；
+* 链码关联的和交易背书一起的策略，就是：
+    - 背书策略`ccEndorsementPolicy`；
+    - 背书者集合`ccEndorserSet`；
+    - 链码机密性策略`ccConfidentialityPolicy`，指定的机密性级别在表6.1中有描述；
+* 链码相关的加密材料，即，非对称加密密钥对`ccPubKey/ccPrivKey`，用来给链码的交易、状态、状态更新提供机密性。
+
+这些信息是包含在（部署）交易`tx`里的，然后传给提交伙伴的`SUBMIT`消息。客户端按照下面的方法构造部署交易`cc`的有效载荷`txPayload`。
+
+部署者先给`txPayload.policies`设置<`ccEndorsementPolicy, ccEndorserSet, ccConfidentialityPolicy`>。
+
+要填写`txPayload.payload`，它先要检查`ccConfidentialityPolicy`是不是设置了`Deploy Payload = Confidential`。如果设置了，部署者用`ccPubKey`加密`chainCode`，所以只有给了权限的伙伴才能看到来你们和它的元数据。即：`txPayload.chainCode := Enc(ccPubKey, chainCode)`。
+
+另外，链码相关的解密密钥`ccPrivKey`会分发给链码`cc`所有的背书伙伴（`ccEndorserSet`里的背书者）。过程是，对每个背书者`e`都会用其公钥对`ccPrivKey`进行加密，得到`ccEndorserSet, wrappedKey_e := Enc(ePubKey, ccPrivKey)`，其中，`ePubKey`是`e`的注册公钥（enrollment public key ）。然后，部署者再创建一个额外的项：`txPayload.endorserMessages := ccEndorserMessages`，其中，`ccEndorserMessages`包含了`ccEndorserSet`里所有`e`的`wrappedKey_e`。
+
+我们强调一下部署交易可能会包含更多的项，这里忽略了是为了表述简单起见。另外，给所有背书者发送加密的链码密钥时，实际加密`chainCode`时可以用混合的加密模式来提升更好的性能。详细的信息文档以后的版本会介绍。
+
+链码`cc`会分配一个标识符，以下称为`chaincodeID`，可以是部署交易`tx`的哈希，第2.2部分介绍过。我们这里假定每个链码它们都是唯一的，对所有伙伴都是可见的。
+
+**部署交易背书（Endorsement of Deploy Transaction）**。前面说过，每个处理链码部署的部署交易可以看成是系统链码的调用交易。这个链码用`dsc`表示，背书策略和背书者集合分别为`dscEndorsementPolicy`和`dscEndorserSet`。这意味着，任何链码的部署交易，都需要根据`dscEndorsementPolicy`进行背书。
+
+**TODO**：需要考虑机密链码的情况下，部署交易本身的背书策略是不是能满足正在部署的链码背书策略，也即，`cc`的部署是不是满足`ccEndorsementPolicy`。或者，看是不是可以把部署交易拆分成两个部分，比如一个是`deploy`（只描述部署信息）和一个是创建链码的`install`。
+
+#### 6.1.2 伙伴处理一个部署交易
+
+当一个伙伴`e`交付了一个链码`cc`的部署交易，它至少有权限访问`chaincodeID`和`txPayload.policies`，里面包括了`ccConfidentialityPolicy`、`ccEndorsementPolicy`和`ccEndorserSet`。
+
+如果`e`还是`cc`的背书者，它还可以获取如下的内容：
+
+* 链码的解密密钥，`ccPrivKey := Dec(ePrivKey, wrappedKey_e)`；
+* 部署有效载荷的明文，`chainCode := Dec(ccPrivKey, txPayload.chainCode)`，假定`Deploy Payload = Confidential`。
+
+鉴于有部署有效载荷`chainCode`的明文，在实际的安装之前，伙伴`e`可以按照下面描述的方法进行一致性检查。它在后面的部署过程中，就可以用`chainCode`的明文了。
+
+**一致性（Consistency）**。在部署链码的时候，协议需要保证每个背书者`e`会实际的安装和运行相同的代码，即使链码的创建者（提交部署交易的伙伴）想要背书者运行不同的代码。要达到这种效果，`e`应该在部署交易的执行过程中有一个验证步骤，大体要能确保这些：部署交易要么`成功`然后伙伴输出会被执行的链码`cc`，要么`失败`就输出对应的错误。部署要确保这个条件成立：如果两个独立的背书者（正常非错误伙伴）部署都成功了，它们部署的链码要是相同的。这个和拜占庭一致性广播的一致性属性（*Consistency property of a Byzantine Consistent Broadcast*）[[CGR11; Sec. 3.10]](http://distributedprogramming.net)条件是一样的。
+
+因为每个背书者执行的是从共识服务那里获取的部署交易，所有的背书者收到的是相同的`chainCode`，里面包含了加密信息。但当背书者用自己的密钥解密的时候，不能自动保证每个背书者从`cc`解密出的结果是一样的。
+
+这可以有多种方式解决：一个解决方案是采用一个专门的在密文中包含随机数的多接受者加密模式。还可以，用零知识证明（zero-knowledge proof ）的可验证加密机制，所有接受者的明文都是相同的（好像这比第一种的效率低）。不管用哪种，部署者要在部署交易`tx`中把确保一致性条件的附加数据要包含进来。
+
+**TODOs**：还有些细节没有说明，比如：
+
+* 给出`dsc`实现的更多信息（可能要用专门的一个部分）。具体包含：
+	- `dsc`代码本身及其实现`dscEndorsmentPolicy`（参考第2.4部分）
+    - `dsc`里`tran-proposal`的细节。还是单独的一个部分？
+* 考虑部署后链码标识符（`chaincodeID`）的其他实现；
+* 描述怎么处理破坏上面说的一致性属性的情况，比如，因为创建者给背书者提供了错误的加密密钥。
+
+### 6.2 机密链码调用
+
+机密链码的调用交易必须要符合部署阶段（`ccConfidentialityPolicy`）指定的`静态`机密性策略。以后的版本会考虑系统运行时确定的`动态`机密性策略的可能。
+
+机密链码和其他链码的调用方式类似。不同的地方是，一个和机密链码相关交易的提交伙伴必须是这个链码的背书者。这就是说，它能访问保护链码及其状态的密钥。要维护无状态的客户端，每个伙伴都知道给定链码有哪些背书者伙伴（参考第6.1部分，`ccEndorserSet`），还给客户端指定合适的提交伙伴。所以，后面的内容我们都假定提交伙伴同时也是背书者。
+
+#### 6.2.1 创建和提交一个机密交易
+
+客户端是了解创建了交易的链码及其背书者的。机密交易调用的`SUBMIT`消息的组成元素和非机密性的是一样的，也是`<SUBMIT, tx, retryFlag>`，其中，`tx=<clientID,chaincodeID,txPayload,clientSig>`，里面的`clientID`是fabric层某种形式的客户端标识，比如一个交易证书，`clientSig`是客户端对`tx`其他项的签名。
+
+注意为了安全的目的，`tx`可以有更多的项，这里都故意忽略了，只是为了表述简单一点。
+
+和非机密交易不同的是：如果和链码关联的机密性策略`ccConfidentialityPolicy`指定了`Invoke Payload = Confidential`，则客户端需要额外的加密调用参数和元数据，即`txPayload.invocation`是`invocation`用`ccPubKey`加密而来的，就是`txPayload.invocation := Enc(ccPubKey, invocation)`。
+
+同样，混合加密机制也可以用来获得更好的性能。同样，部署阶段设置的密钥还可以用来生成其他的密钥，比如，加密关键状态的密钥，这样可以减少需要管理/分发密钥的总数量。
+
+**TODO**：可选择地提供一个还可以隐藏链码标识符的自定义加密方法。
+
+#### 6.2.2 背书一个机密交易
+
+收到和验证`<SUBMIT, tx, retryFlag>`消息时，为了临时执行交易相关的链码和准备发送给共识服务的交易，提交伙伴首先要解密机密交易有效载荷。更确切地说，如`ccConfidentialityPolicy`指定了`Invoke Payload`是机密的，提交伙伴先要获取对应的链码相关的解密密钥`ccPrivKey`再解密`txPayload.invocation`。已有假设提交伙伴是链码的背书者。提交伙伴，我们叫`e`，可以从链码`chaincodeID`的部署交易获取`wrapped_e`，再通过`wrapped_e`获得`ccPrivKey`。然后，就可以计算：`invocation := Dec(ccPrivKey, txPayload.invocation)`。
+
+有了`invocation`的操作和元数据，提交伙伴就可以临时地用它本地状态执行交易来生成一个交易提议了。如果链码的机密性策略指定了`State`是机密的，提交伙伴就用`ccPrivKey`在边读取状态的时候边解密状态值了。
+
+还有，当机密性策略指定了`State = Confidential`，要进行状态更新，提交伙伴需要用`ccPubKey`来加密`stateUpdates`里的新状态值。状态是键值对的形式，只有变化的值会被加密。版本依赖是不加密的。
+
+提交伙伴的交易提议现在是这样构成的：`tran-proposal := (spID, chaincodeID, txContentBlob, stateUpdates, verDep)`，其中，`txContentBlob`是客户端提交的调用交易`tx`的某种形式。
+
+提交伙伴创建一个`PROPOSE`消息发送给背书集合里其他的背书者（第2.2部分描述过）：`<PROPOSE, tx, tran-proposal>`。
+
+注意背书者必须要验证`tx`里的`chaincodeID`和`tran-proposal`是一致的。
+
+总之，这种机制确保了即使状态是加密的，链码的背书者能够无障碍的访问状态，其他伙伴就不行。一旦共识服务发送`stateUpdates`给伙伴后，每个伙伴都更新本地的状态。注意链码的背书者还会透明的更新和操作密文，它们只有在对下一个交易背书的时候才需要访问明文。
+
+**TOTO**：重新看看第4部分，更新的描述哪些部分需要放到总账上。
+
+
+
+
+
+
+
