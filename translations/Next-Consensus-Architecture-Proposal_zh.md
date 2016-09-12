@@ -13,6 +13,11 @@ description: ""
 
 ---
 
+* 目录
+{:toc}
+
+---
+
 这篇文档记录的是区块链基础架构，区块链节点根据角色分为*peers*（维护状态/总账的节点）和*consenters*（批准区块链状态中交易顺序的节点）。在通常的区块链架构中（包括2016年7月的Hyperledger fabric），这些角色都是集成的（参看Hyperledger fabic的*validating peer*）。这个架构还引入了背书节点（endorsers）的概念，它其实是一种特殊类型的节点，用来模拟执行和背书交易（大概和Hyperldger fabric 0.5-developer-preview的执行/验证交易是类似的）。
 
 这种架构和peers/consenters/endorsers集成的设计相比有如下的优势：

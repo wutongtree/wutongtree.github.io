@@ -115,6 +115,64 @@
 
 <hr />
 
+<ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">目录</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">1. 系统架构</a>    <ul>
+      <li><a href="#section-2" id="markdown-toc-section-2">1.1. 交易</a></li>
+      <li><a href="#state" id="markdown-toc-state">1.2. 状态（State）</a></li>
+      <li><a href="#nodes" id="markdown-toc-nodes">1.3. 节点（Nodes）</a>        <ul>
+          <li><a href="#client" id="markdown-toc-client">1.3.1. 客户端（Client）</a></li>
+          <li><a href="#peer" id="markdown-toc-peer">1.3.2. 伙伴（Peer）</a></li>
+          <li><a href="#consensus-service-node-consenters" id="markdown-toc-consensus-service-node-consenters">1.3.3. 共识服务节点（Consensus service node (Consenters)）</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#section-3" id="markdown-toc-section-3">2. 交易背书的基本流程</a>    <ul>
+      <li><a href="#section-4" id="markdown-toc-section-4">2.1. 客户端创建一个交易并发送给自己选择的一个提交伙伴</a></li>
+      <li><a href="#section-5" id="markdown-toc-section-5">2.2. 提交伙伴准备一个交易并发送给背书者获取背书</a></li>
+      <li><a href="#section-6" id="markdown-toc-section-6">2.3. 背书服务和给交易背书</a></li>
+      <li><a href="#section-7" id="markdown-toc-section-7">2.4. 提交伙伴收集交易的背书并通过共识服务进行广播</a></li>
+      <li><a href="#section-8" id="markdown-toc-section-8">2.5. 共识服务给伙伴发布交易</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-9" id="markdown-toc-section-9">3. 背书策略</a>    <ul>
+      <li><a href="#section-10" id="markdown-toc-section-10">3.1. 背书策略规范</a></li>
+      <li><a href="#section-11" id="markdown-toc-section-11">3.2. 实现</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-12" id="markdown-toc-section-12">4. 区块链数据结构</a>    <ul>
+      <li><a href="#section-13" id="markdown-toc-section-13">4.1. 批量处理和块信息</a></li>
+      <li><a href="#section-14" id="markdown-toc-section-14">4.2. 区块形成链</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-15" id="markdown-toc-section-15">5. 状态传输和检查点</a>    <ul>
+      <li><a href="#section-16" id="markdown-toc-section-16">5.1. 原始总账状态传输（批量传输）</a></li>
+      <li><a href="#section-17" id="markdown-toc-section-17">5.2. 检查点</a>        <ul>
+          <li><a href="#section-18" id="markdown-toc-section-18">5.2.1. 检查点协议</a></li>
+          <li><a href="#section-19" id="markdown-toc-section-19">5.2.2. 有效检查点</a></li>
+          <li><a href="#section-20" id="markdown-toc-section-20">5.2.3. 已验证总账状态传输（区块传输）</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#confidentiality" id="markdown-toc-confidentiality">6. 机密性（Confidentiality）</a>    <ul>
+      <li><a href="#section-21" id="markdown-toc-section-21">6.1 机密链码部署</a>        <ul>
+          <li><a href="#section-22" id="markdown-toc-section-22">6.1.1 创建一个部署交易</a></li>
+          <li><a href="#section-23" id="markdown-toc-section-23">6.1.2 伙伴处理一个部署交易</a></li>
+        </ul>
+      </li>
+      <li><a href="#section-24" id="markdown-toc-section-24">6.2 机密链码调用</a>        <ul>
+          <li><a href="#section-25" id="markdown-toc-section-25">6.2.1 创建和提交一个机密交易</a></li>
+          <li><a href="#section-26" id="markdown-toc-section-26">6.2.2 背书一个机密交易</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
 <p>这篇文档记录的是区块链基础架构，区块链节点根据角色分为<em>peers</em>（维护状态/总账的节点）和<em>consenters</em>（批准区块链状态中交易顺序的节点）。在通常的区块链架构中（包括2016年7月的Hyperledger fabric），这些角色都是集成的（参看Hyperledger fabic的<em>validating peer</em>）。这个架构还引入了背书节点（endorsers）的概念，它其实是一种特殊类型的节点，用来模拟执行和背书交易（大概和Hyperldger fabric 0.5-developer-preview的执行/验证交易是类似的）。</p>
 
 <p>这种架构和peers/consenters/endorsers集成的设计相比有如下的优势：</p>
