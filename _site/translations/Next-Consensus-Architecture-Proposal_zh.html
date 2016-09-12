@@ -129,42 +129,42 @@
     </ul>
   </li>
   <li><a href="#section2" id="markdown-toc-section2">2. 交易背书的基本流程 (Basic workflow of transaction endorsement)</a>    <ul>
-      <li><a href="#section-1" id="markdown-toc-section-1">2.1. 客户端创建一个交易并发送给自己选择的一个请求节点</a></li>
-      <li><a href="#section-2" id="markdown-toc-section-2">2.2. 请求节点准备一个交易并发送给背书者获取背书</a></li>
-      <li><a href="#section-3" id="markdown-toc-section-3">2.3. 背书服务和给交易背书</a></li>
-      <li><a href="#section-4" id="markdown-toc-section-4">2.4. 请求节点收集交易的背书并通过共识服务进行广播</a></li>
-      <li><a href="#peer" id="markdown-toc-peer">2.5. 共识服务给Peer节点发布交易</a></li>
+      <li><a href="#section2_1" id="markdown-toc-section2_1">2.1. 客户端创建一个交易并发送给自己选择的一个请求节点</a></li>
+      <li><a href="#section2_2" id="markdown-toc-section2_2">2.2. 请求节点准备一个交易并发送给背书者获取背书</a></li>
+      <li><a href="#section-1" id="markdown-toc-section-1">2.3. 背书节点接收交易并给交易背书</a></li>
+      <li><a href="#section-2" id="markdown-toc-section-2">2.4. 请求节点收集交易的背书并通过共识服务广播出去</a></li>
+      <li><a href="#peer" id="markdown-toc-peer">2.5. 共识服务发布交易给Peer节点</a></li>
     </ul>
   </li>
-  <li><a href="#section-5" id="markdown-toc-section-5">3. 背书策略</a>    <ul>
-      <li><a href="#section-6" id="markdown-toc-section-6">3.1. 背书策略规范</a></li>
-      <li><a href="#section-7" id="markdown-toc-section-7">3.2. 实现</a></li>
+  <li><a href="#section3" id="markdown-toc-section3">3. 背书策略</a>    <ul>
+      <li><a href="#section-3" id="markdown-toc-section-3">3.1. 背书策略规范</a></li>
+      <li><a href="#section-4" id="markdown-toc-section-4">3.2. 实现</a></li>
     </ul>
   </li>
   <li><a href="#section4" id="markdown-toc-section4">4. 区块链数据结构</a>    <ul>
-      <li><a href="#section-8" id="markdown-toc-section-8">4.1. 批量处理和块信息</a></li>
-      <li><a href="#section-9" id="markdown-toc-section-9">4.2. 区块形成链</a></li>
+      <li><a href="#section-5" id="markdown-toc-section-5">4.1. 批量处理和块信息</a></li>
+      <li><a href="#section-6" id="markdown-toc-section-6">4.2. 区块形成链</a></li>
     </ul>
   </li>
-  <li><a href="#section-10" id="markdown-toc-section-10">5. 状态传输和检查点</a>    <ul>
-      <li><a href="#section-11" id="markdown-toc-section-11">5.1. 原始总账状态传输（批量传输）</a></li>
-      <li><a href="#section-12" id="markdown-toc-section-12">5.2. 检查点</a>        <ul>
-          <li><a href="#section-13" id="markdown-toc-section-13">5.2.1. 检查点协议</a></li>
-          <li><a href="#section-14" id="markdown-toc-section-14">5.2.2. 有效检查点</a></li>
-          <li><a href="#section-15" id="markdown-toc-section-15">5.2.3. 已验证总账状态传输（区块传输）</a></li>
+  <li><a href="#section-7" id="markdown-toc-section-7">5. 状态传输和检查点</a>    <ul>
+      <li><a href="#section-8" id="markdown-toc-section-8">5.1. 原始总账状态传输（批量传输）</a></li>
+      <li><a href="#section-9" id="markdown-toc-section-9">5.2. 检查点</a>        <ul>
+          <li><a href="#section-10" id="markdown-toc-section-10">5.2.1. 检查点协议</a></li>
+          <li><a href="#section-11" id="markdown-toc-section-11">5.2.2. 有效检查点</a></li>
+          <li><a href="#section-12" id="markdown-toc-section-12">5.2.3. 已验证总账状态传输（区块传输）</a></li>
         </ul>
       </li>
     </ul>
   </li>
   <li><a href="#confidentiality" id="markdown-toc-confidentiality">6. 机密性（Confidentiality）</a>    <ul>
-      <li><a href="#section-16" id="markdown-toc-section-16">6.1 机密链码部署</a>        <ul>
-          <li><a href="#section-17" id="markdown-toc-section-17">6.1.1 创建一个部署交易</a></li>
+      <li><a href="#section-13" id="markdown-toc-section-13">6.1 机密链码部署</a>        <ul>
+          <li><a href="#section-14" id="markdown-toc-section-14">6.1.1 创建一个部署交易</a></li>
           <li><a href="#peer-1" id="markdown-toc-peer-1">6.1.2 Peer节点处理一个部署交易</a></li>
         </ul>
       </li>
-      <li><a href="#section-18" id="markdown-toc-section-18">6.2 机密链码调用</a>        <ul>
-          <li><a href="#section-19" id="markdown-toc-section-19">6.2.1 创建和提交一个机密交易</a></li>
-          <li><a href="#section-20" id="markdown-toc-section-20">6.2.2 背书一个机密交易</a></li>
+      <li><a href="#section-15" id="markdown-toc-section-15">6.2 机密链码调用</a>        <ul>
+          <li><a href="#section-16" id="markdown-toc-section-16">6.2.1 创建和提交一个机密交易</a></li>
+          <li><a href="#section-17" id="markdown-toc-section-17">6.2.2 背书一个机密交易</a></li>
         </ul>
       </li>
     </ul>
@@ -345,13 +345,15 @@
   </li>
 </ul>
 
+<hr />
+
 <h2 id="section2">2. 交易背书的基本流程 (Basic workflow of transaction endorsement)</h2>
 
 <p>下面我们概要性的介绍一个交易的高层请求流程。</p>
 
 <p><strong>备注</strong>：<em>注意后面的协议并不假定所有的交易都是确定性的，允许不确定性的交易</em>。</p>
 
-<h3 id="section-1">2.1. 客户端创建一个交易并发送给自己选择的一个请求节点</h3>
+<h3 id="section2_1">2.1. 客户端创建一个交易并发送给自己选择的一个请求节点</h3>
 
 <p>要调用一个交易，客户端发送如下的消息给请求节点<code>spID</code>。</p>
 
@@ -394,7 +396,7 @@
 
 <p><strong>待办</strong>：确定是否要在客户端显示的包含本地/逻辑时间（时间戳）。</p>
 
-<h3 id="section-2">2.2. 请求节点准备一个交易并发送给背书者获取背书</h3>
+<h3 id="section2_2">2.2. 请求节点准备一个交易并发送给背书者获取背书</h3>
 
 <p>请求节点收到客户端发来的<code>&lt;SUBMIT,tx,retryFlag&gt;</code>消息后，首先要验证客户端的签名<code>clientSig</code>，然后就准备交易。请求节点会临时的<em>执行</em>交易（<code>txPayload</code>），过程是通过执行交易关联的链码（<code>chaincodeID</code>）和拷贝请求节点本地保存的状态。</p>
 
@@ -432,7 +434,7 @@
 
 <p><strong>待办</strong>：需要确定请求节点和背书节点之间的通信：用p2p还是通过共识服务。</p>
 
-<h3 id="section-3">2.3. 背书服务和给交易背书</h3>
+<h3 id="section-1">2.3. 背书节点接收交易并给交易背书</h3>
 
 <p>链码<code>tran-proposal.chaincodeID</code>对应的背书节点收到通过<code>PROPOSE</code>消息发送来的交易后，执行如下步骤：</p>
 
@@ -462,41 +464,41 @@
 
 <p><strong>待办</strong>：确定采用上面的哪种设计。</p>
 
-<h3 id="section-4">2.4. 请求节点收集交易的背书并通过共识服务进行广播</h3>
+<h3 id="section-2">2.4. 请求节点收集交易的背书并通过共识服务广播出去</h3>
 
-<p>请求节点等待接收足够的信息和对<code>(TRANSACTION-VALID, tid)</code>进行的签名，表明交易提议（transaction proposal）是有背书（可能包含它自己的签名）的。这个过程依赖背书策略（再看看第3部分）。如果满足背书策略，交易就有<code>背书</code>了，注意这会儿还没有成功交付。从背书节点收集到的有背书交易的签名就叫<em>背书（endorsement）</em>，请求节点把它们存储到<code>endorsement</code>里。</p>
+<p>请求节点会一直等待，直到接收的消息和对<code>(TRANSACTION-VALID, tid)</code>进行的签名，足够判断这个交易提议（transaction proposal）是背书过（可能包含它自己的签名）的。这个过程依赖背书策略（再看看<a href="#section3">第3部分</a>）。如果满足背书策略，交易就是<code>背书</code>过了，注意这会儿它还没有提交（committed）。从背书节点收集到的能确定交易是背书过的签名就叫<em>背书（endorsement）</em>，请求节点把它们存储到<code>endorsement</code>里。</p>
 
-<p>如果请求节点没有收集到交易提议的背书，它就丢弃掉这个交易并通知提交客户端。如果提交客户端设置（看步骤1和<code>SUBMIT</code>消息）了<code>retryFlag</code>，请求节点可能（根据请求节点的策略）会对交易进行重试（步骤2）。</p>
+<p>如果请求节点没有收集到交易提议的背书，它就丢弃掉这个交易并通知提交客户端。如果提交客户端设置（看<a href="#section2_1">步骤1</a>和<code>SUBMIT</code>消息）了<code>retryFlag</code>，请求节点可能（根据请求节点的策略）会对交易进行重试（<a href="#section2_2">步骤2</a>）。</p>
 
-<p>对一个有效背书的交易，我们开始使用consensus-fabric。请求节点使用<code>broadcast(blob)</code>调用共识服务，其中<code>blob=(tran-proposal, endorsement)</code>。</p>
+<p>有了有效背书的交易，我们开始使用fabric的共识服务。请求节点使用<code>broadcast(blob)</code>调用共识服务，其中<code>blob=(tran-proposal, endorsement)</code>。</p>
 
-<h3 id="peer">2.5. 共识服务给Peer节点发布交易</h3>
+<h3 id="peer">2.5. 共识服务发布交易给Peer节点</h3>
 
 <p>当出现一个<code>deliver(seqno, prevhash, blob)</code>事件，一个Peer节点更新所有序号小于<code>seqno</code>消息的状态，过程是这样的：</p>
 
 <ul>
   <li>
-    <p>Peer节点根据链码（<code>blob.tran-proposal.chaincodeID</code>）的策略检查<code>blob.endorsement</code>是否有效（这个步骤可以不用等到序号小于<code>seqno</code>的状态更新这个时候）。</p>
+    <p>Peer节点根据链码（<code>blob.tran-proposal.chaincodeID</code>）的策略检查<code>blob.endorsement</code>是否有效（这个步骤可以不用等到更新序号小于<code>seqno</code>的状态这个时候）。</p>
   </li>
   <li>
     <p>Peer节点同时验证依赖<code>blob.tran-proposal.verDep</code>是有效的。</p>
   </li>
 </ul>
 
-<p>根据状态更新选择的一致性内容（consistency property）或者“隔离保证（isolation guarantee）”不同，依赖验证有多种实现方式。比如，<strong>可串行性（serializability）</strong>可以要求每个<code>readset</code>和<code>writeset</code>里键对应的版本号必须和状态里面键的版本号相同，丢掉不能满足这个要求的交易。另外一个例子，<strong>快照隔离（snapshot isolation ）</strong>要求<code>writeset</code>里所有的键，状态里的键和依赖数据里的版本号都一样。数据库要求更多的隔离保证。</p>
+<p>根据状态更新选择的一致性内容（consistency property）或者“隔离保证（isolation guarantee）”不同，依赖验证有多种实现方式。比如，<strong>可串行性（serializability）</strong>可以要求每个<code>readset</code>和<code>writeset</code>里键对应的版本号必须和状态里面键的版本号相同，并抛弃掉不能满足这个要求的交易。另外一个例子，<strong>快照隔离（snapshot isolation ）</strong>要求<code>writeset</code>里所有的键，状态里的键和依赖数据里的版本号都是一样的。数据库著作里包含了更多的隔离保证。</p>
 
-<p>待办：确定坚持可串行性还是允许链码指定隔离级别。</p>
+<p><strong>待办</strong>：确定坚持可串行性还是允许链码指定隔离级别。</p>
 
 <ul>
   <li>
-    <p>如果所有的检查都通过了，这个交易就被认为是<em>有效的（valid）</em>或者<em>已交付的（committed）</em>。这就是说，一个Peer节点添加一个交易到总账上，然后会在区块链状态上执行<code>blob.tran-proposal.stateUpdates</code>。只有已交付的交易才会修改状态。</p>
+    <p>如果所有的检查都通过了，这个交易就被认为是<em>有效的（valid）</em>或者<em>提交的（committed）</em>。这就是说，一个Peer节点添加一个交易到总账上，然后会在区块链状态上执行<code>blob.tran-proposal.stateUpdates</code>。只有提交的交易才会修改状态。</p>
   </li>
   <li>
-    <p>如果有检查失败了，交易就是无效的，Peer节点会丢弃这个交易。重要的是要注意无效的交易是没有交付的，不会修改状态，也不会被记录。</p>
+    <p>如果有任何检查失败了，交易就是无效的，Peer节点会丢弃这个交易。重要的是要注意无效的交易是没有提交的，不会修改状态，也不会被记录。</p>
   </li>
 </ul>
 
-<p>另外，请求节点会通知客户端丢弃的交易。如果提交客户端设置（看步骤1和<code>SUBMIT</code>消息）了<code>retryFlag</code>，请求节点可能（根据请求节点的策略）会对交易进行重试（步骤2）。</p>
+<p>另外，请求节点会通知客户端丢弃的交易。如果提交客户端设置（看<a href="#section2_1">步骤1</a>和<code>SUBMIT</code>消息）了<code>retryFlag</code>，请求节点可能（根据请求节点的策略）会对交易进行重试（<a href="#section2_2">步骤2</a>）。</p>
 
 <p><img src="../images/flow-2.png" alt="交易流程图解" /></p>
 
@@ -504,63 +506,53 @@
 
 <hr />
 
-<h2 id="section-5">3. 背书策略</h2>
+<h2 id="section3">3. 背书策略</h2>
 
-<h3 id="section-6">3.1. 背书策略规范</h3>
+<h3 id="section-3">3.1. 背书策略规范</h3>
 
-<p><strong>背书策略</strong>是对交易进行背书的<em>条件</em>。背书策略是链码安装的时候<code>deploy</code>交易指定的。只有根据策略进行背书的交易才是有效的。链码的调用交易会先获取链码策略的背书，否则是交付不了的。这是通过请求节点和背书节点之间的交互完成的，在第2部分已经介绍过了。</p>
+<p><strong>背书策略</strong>是会对交易进行背书的<em>条件</em>。背书策略是链码安装的时候<code>deploy</code>交易指定的。只有根据策略背书策略过的交易才是有效的。链码的调用交易会先获取满足链码策略的背书，否则是提交不了的。这是通过请求节点和背书节点之间的交互完成的，在<a href="#section2">第2部分</a>已经介绍过了。</p>
+
+<p>形式上，背书策略是对交易、背书和可能有的下一步状态判断是TRUE或者FALSE的断言。部署交易的背书策略是从系统层面的策略获取的（比如，从系统链码获取）。</p>
 
 <p>形式上，背书策略是关于特定变量的断言。实际上，它可以是：</p>
 
 <ol>
-  <li>链码相关的键或者标识符（链码的元数据里面能找到），比如，背书者集合；</li>
+  <li>链码相关的键或者标识符（链码的元数据里面能找到），比如，背书节点集合；</li>
   <li>更多的链码元数据；</li>
   <li>交易本身的元素；</li>
   <li>可能还有其他的。</li>
 </ol>
 
-<p>背书策略断言的评估必须是确定性的。背书策略不能是复杂的，也不能是“小链码（mini chaincode）”。背书策略规范语言是有限制的，并且能够增加确定性。</p>
+<p>背书策略断言的评估必须是确定性的。背书策略不能是复杂的，也不能是“小的链码（mini chaincode）”。背书策略规范语言必须是有限的，并且要能够增加确定性。</p>
 
-<p>断言列表是由简单到丰富，复杂性是由易到难的。就是说，支持只有节点的键和标识符的策略是相对比较简单的。</p>
+<p>断言列表是由简单到丰富，复杂性是由易到难的。就是说，支持只有键和节点标识符的策略是相对比较简单的。</p>
 
-<p>待办：确定背书策略的参数。</p>
+<p><strong>待办</strong>：确定背书策略的参数。</p>
 
-<p>断言可能包含结果是TRUE或者FALSE的逻辑表达式。一般情况下，条件会用链码的背书节点对交易调用签发的数字签名。</p>
+<p>断言可能会包含结果是TRUE或者FALSE的逻辑表达式。一般情况下，这个条件里会包含链码背书节点对交易调用签发的数字签名。</p>
 
-<p>假链码指定了一个背书者集合<code>E = {Alice, Bob, Charlie, Dave, Eve, Frank, George}</code>，一些策略的示例：</p>
+<p>假设链码指定了一个背书节点集合<code>E = {Alice, Bob, Charlie, Dave, Eve, Frank, George}</code>，一些示范性的策略：</p>
 
 <ul>
-  <li>
-    <p>E集合所有元素的有效签名。</p>
-  </li>
-  <li>
-    <p>E集合任意一个元素的有效签名。</p>
-  </li>
-  <li>
-    <p>满足<code>(Alice OR Bob) AND (any two of: Charlie, Dave, Eve, Frank, George)</code>这个条件的背书节点的有效签名。</p>
-  </li>
-  <li>
-    <p>7个背书者中任意5个的有效签名。（更通用的情况是，有<code>n &gt; 3f</code>个背书者的链码，需要<code>n</code>个背书者中有<code>2f+1</code>个有有效签名，或者任意一个<em>超过</em><code>(n+f)/2</code>个背书者的组有有效签名。）。</p>
-  </li>
-  <li>
-    <p>假设背书者都有一个“投注”或者“权重”，比如<code>{Alice=49, Bob=15, Charlie=15, Dave=10, Eve=7, Frank=3, George=1}</code>，总投注是100：策略要求多数投注集合的有效签名（比如，一个总投注严格大于50的组），只要和George的<code>X</code>不一样的<code>{Alice, X}</code>，或者{everyone together except Alice}等等。</p>
-  </li>
-  <li>
-    <p>上面的例子里投注可以是静态的（链码的元数据里写死的）或者动态的（比如，依赖链码的状态并且可以在执行过程中修改）。</p>
-  </li>
+  <li>E集合所有元素的有效签名。</li>
+  <li>E集合任意一个元素的有效签名。</li>
+  <li>满足<code>(Alice OR Bob) AND (any two of: Charlie, Dave, Eve, Frank, George)</code>这个条件的背书节点的有效签名。</li>
+  <li>7个背书节点中任意5个的有效签名。（更通用的情况是，有<code>n &gt; 3f</code>个背书节点的链码，需要<code>n</code>个背书节点中有<code>2f+1</code>个有有效签名，或者任意一个<em>超过</em><code>(n+f)/2</code>个背书节点的组有有效签名。）。</li>
+  <li>假设背书节点都有一个“投注”或者“权重”，比如<code>{Alice=49, Bob=15, Charlie=15, Dave=10, Eve=7, Frank=3, George=1}</code>，总投注是100：策略要求多数投注集合的有效签名（即，一个总投注严格大于50的组），比如任何和George不一样<code>X</code>的<code>{Alice, X}</code>，或者<code>{除开Alice的所有人}</code>等等。</li>
+  <li>上面的例子里投注可以是静态的（链码的元数据里写死的）或者动态的（比如，依赖链码的状态并且可以在执行过程中修改）。</li>
 </ul>
 
-<p>这些策略能起到多少作用还依赖应用程序，对背书者错误或者捣乱需要的恢复力，还有其他不同的属性。</p>
+<p>这些策略能起到多少作用还依赖于应用，对有背书节点失效或者破坏时期望的恢复力，还有其他不同的属性。</p>
 
-<h3 id="section-7">3.2. 实现</h3>
+<h3 id="section-4">3.2. 实现</h3>
 
-<p>一般情况，背书策略会根据背书节点要求的签名进行制定。链码的元数据必须要包含相应的签名验证密钥。</p>
+<p>通常情况下，背书策略会根据背书节点要求的签名来制定。链码的元数据必须要包含相应的签名验证密钥。</p>
 
-<p>通常，背书是有一组签名组成的。每个Peer节点或者能获取到链码元数据（包含签名验证密钥）的投票节点都可以本地验证背书，因为它们不需要和其他节点进行交互。节点也不需要访问状态才能验证背书。</p>
+<p>通常，背书是由一组签名组成的。每个Peer节点或者能获取到链码元数据（包含签名验证密钥）的投票节点都可以本地验证背书，因为它们不需要和其他节点进行交互。节点也不需要访问状态才能验证背书。</p>
 
 <p>链码其他元数据的背书也可以用同样的方法验证。</p>
 
-<p>待办：形式化背书策略，设计具体的实现。</p>
+<p><strong>待办</strong>：形式化背书策略，设计具体的实现。</p>
 
 <hr />
 
@@ -584,7 +576,7 @@
   </li>
 </ul>
 
-<h3 id="section-8">4.1. 批量处理和块信息</h3>
+<h3 id="section-5">4.1. 批量处理和块信息</h3>
 
 <p>共识服务可以<em>批量</em>输出blobs，而不是输出单个的交易（blobs）。这样，共识服务必须要利用并传达每个批块里确定性的交易顺序。每个批块里交易数量是共识实现动态选择的。</p>
 
@@ -596,7 +588,7 @@
 
 <p>图 2. 从原始总账批量到已验证总账图解</p>
 
-<h3 id="section-9">4.2. 区块形成链</h3>
+<h3 id="section-6">4.2. 区块形成链</h3>
 
 <p>跟第1.3.3节描述的一样，共识服务输出原始总账的批块后组成了一个哈希链。</p>
 
@@ -621,13 +613,13 @@
 
 <p>Peer节点会把所有的信息连接在一起并计算哈希，得出已验证总账里区块的哈希。</p>
 
-<h2 id="section-10">5. 状态传输和检查点</h2>
+<h2 id="section-7">5. 状态传输和检查点</h2>
 
 <p>通常情况下，正常运行时，Peer节点会从共识服务收到一系列的<code>deliver()</code>事件（包含批块交易），然后把这些批块追加到原始总账中并相应的更新区块状态、已验证总账。</p>
 
 <p>可是，由于网络划分或者Peer节点临时停电等，一个Peer节点可能错过原始总账中多个批块。这时，Peer节点就必须从其他Peer节点那里<em>传输状态</em>才能和网络中的其他Peer节点保存同步。这个部分就来看看一个实现。</p>
 
-<h3 id="section-11">5.1. 原始总账状态传输（批量传输）</h3>
+<h3 id="section-8">5.1. 原始总账状态传输（批量传输）</h3>
 
 <p>为了解释清楚基本的<em>状态传输</em>怎么实现的，假定Peer节点<code>p</code>的原始总账本地拷贝里最后一个批块序号是25（也就是，最后收到的<code>deliver()</code>事件的<code>seqno</code>等于25）。一段时间后，Peer节点<code>p</code>收到共识服务的<code>deliver(seqno=54,hash53,blob)</code>事件。</p>
 
@@ -639,7 +631,7 @@
 
 <p>注意即使<code>p</code>缺失一些序号比较大的批块，它仍然可以在收到序号小的区块的时候就开始重建区块链状态和已验证总账。但是，在保存状态和已交付区块到已验证总账之前，Peer节点<code>p</code>还需要完成缺失区块的状态传输（我们给的例子里，包含到53号批块），还要处理第2.5部分描述的单个传输批块。</p>
 
-<h3 id="section-12">5.2. 检查点</h3>
+<h3 id="section-9">5.2. 检查点</h3>
 
 <p>原始总账包含了无效的交易，不需要永久保存。但是，Peer节点们不能在建立了相应的已验证区块后就简单的丢弃原始总账批块，精简原始总账。就是说，这个时候，如果有新的Peer节点加入网络，其他Peer节点不能给他传输原始总账里的被丢弃的批块，也不说服新加入的Peer节点相信已验证总账区块的有效性。</p>
 
@@ -647,7 +639,7 @@
 
 <p>注意检查点方便了总账的精简，它只是属于性能优化，对于设计正确来说检查点并不是必须的。</p>
 
-<h4 id="section-13">5.2.1. 检查点协议</h4>
+<h4 id="section-10">5.2.1. 检查点协议</h4>
 
 <p>Peer节点们每<code>CHK</code>个区块就周期性的执行检查点，<code>CHK</code>是可以配置的参数。开始的时候，Peer节点会给其他Peer节点广播<code>&lt;CHECKPOINT,blocknohash,blockno,peerSig&gt;</code>消息，其中，<code>blockno</code>是当前的区块号，<code>blocknohash</code>是它的哈希值，<code>peerSig</code>是Peer节点对<code>(CHECKPOINT,blocknohash,blockno)</code>的签名，这里的区块都是已验证总账里的。</p>
 
@@ -667,7 +659,7 @@
   </li>
 </ul>
 
-<h4 id="section-14">5.2.2. 有效检查点</h4>
+<h4 id="section-11">5.2.2. 有效检查点</h4>
 
 <p>显然，检查点协议提出了这个问题：<em>什么时候精简原始总账？多少<code>CHECKPOINT</code>消息是“足够多”？</em>。这是<em>检查点有效性策略</em>里面定义的，（至少）有两种可能的方法，也可能一起用：</p>
 
@@ -689,7 +681,7 @@
   </li>
 </ul>
 
-<h4 id="section-15">5.2.3. 已验证总账状态传输（区块传输）</h4>
+<h4 id="section-12">5.2.3. 已验证总账状态传输（区块传输）</h4>
 
 <p>除了能帮助精简原始总账外，检查点可以在已验证总账区块传输的时候传输状态。这可以部分替代原始总账的批块传输。</p>
 
@@ -794,9 +786,9 @@
 
 <p><em>状态机密性的粒度</em>。设计现在把链码和它们的状态看成一个机密性域，不划分成不同的K/V项。可以在应用层给不同的状态部分设置不同的机密性策略，未来的目标是客户端的一个集合可以看到状态的某些部分，看不到其他部分。就是说，从架构上是不反对有这种保证的，在单个或者多个链码有足够的加密工具，应用层也是可以实现的。这会出现<em>链码层的机密性</em>。其他的要去，比如对请求节点隐藏背书者标识符和背书策略会在以后的设计迭代中处理。</p>
 
-<h3 id="section-16">6.1 机密链码部署</h3>
+<h3 id="section-13">6.1 机密链码部署</h3>
 
-<h4 id="section-17">6.1.1 创建一个部署交易</h4>
+<h4 id="section-14">6.1.1 创建一个部署交易</h4>
 
 <p>要部署有机密性支持的链码<code>cc</code>，客户端（<code>cc</code>的部署者）部署<code>cc</code>需要设置：</p>
 
@@ -860,13 +852,13 @@
   <li>描述怎么处理破坏上面说的一致性属性的情况，比如，因为创建者给背书者提供了错误的加密密钥。</li>
 </ul>
 
-<h3 id="section-18">6.2 机密链码调用</h3>
+<h3 id="section-15">6.2 机密链码调用</h3>
 
 <p>机密链码的调用交易必须要符合部署阶段（<code>ccConfidentialityPolicy</code>）指定的<code>静态</code>机密性策略。以后的版本会考虑系统运行时确定的<code>动态</code>机密性策略的可能。</p>
 
 <p>机密链码和其他链码的调用方式类似。不同的地方是，一个和机密链码相关交易的请求节点必须是这个链码的背书者。这就是说，它能访问保护链码及其状态的密钥。要维护无状态的客户端，每个Peer节点都知道给定链码有哪些背书者Peer节点（参考第6.1部分，<code>ccEndorserSet</code>），还给客户端指定合适的请求节点。所以，后面的内容我们都假定请求节点同时也是背书者。</p>
 
-<h4 id="section-19">6.2.1 创建和提交一个机密交易</h4>
+<h4 id="section-16">6.2.1 创建和提交一个机密交易</h4>
 
 <p>客户端是了解创建了交易的链码及其背书者的。机密交易调用的<code>SUBMIT</code>消息的组成元素和非机密性的是一样的，也是<code>&lt;SUBMIT, tx, retryFlag&gt;</code>，其中，<code>tx=&lt;clientID,chaincodeID,txPayload,clientSig&gt;</code>，里面的<code>clientID</code>是fabric层某种形式的客户端标识，比如一个交易证书，<code>clientSig</code>是客户端对<code>tx</code>其他项的签名。</p>
 
@@ -878,7 +870,7 @@
 
 <p><strong>待办</strong>：可选择地提供一个还可以隐藏链码标识符的自定义加密方法。</p>
 
-<h4 id="section-20">6.2.2 背书一个机密交易</h4>
+<h4 id="section-17">6.2.2 背书一个机密交易</h4>
 
 <p>收到和验证<code>&lt;SUBMIT, tx, retryFlag&gt;</code>消息时，为了临时执行交易相关的链码和准备发送给共识服务的交易，请求节点首先要解密机密交易有效载荷。更确切地说，如<code>ccConfidentialityPolicy</code>指定了<code>Invoke Payload</code>是机密的，请求节点先要获取对应的链码相关的解密密钥<code>ccPrivKey</code>再解密<code>txPayload.invocation</code>。已有假设请求节点是链码的背书者。请求节点，我们叫<code>e</code>，可以从链码<code>chaincodeID</code>的部署交易获取<code>wrapped_e</code>，再通过<code>wrapped_e</code>获得<code>ccPrivKey</code>。然后，就可以计算：<code>invocation := Dec(ccPrivKey, txPayload.invocation)</code>。</p>
 
