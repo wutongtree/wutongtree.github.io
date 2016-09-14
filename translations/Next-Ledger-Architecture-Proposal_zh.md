@@ -24,8 +24,8 @@ description: ""
 [时间点查询](#pointintime)  
 [查询语言](#querylanguage)
 
-<a name="motivation"></a>
-## 目的
+
+## <a name="motivation"></a>目的
 
 探索新ledger架构的动机来自于社区反馈。现存的ledger可以支持一些（但不是所有）下面的需求，我们要探索一种新的ledger来满足已经了解的所有需求。 根据在很多社区（Slack、Github等）及面对面的讨论，很显然，大家强烈希望支持以下需求：
 
@@ -39,8 +39,8 @@ description: ""
 8. 支持背书从共识中分离，详情见 [下一代共识架构提案](http://wutongtree.github.io/translations/Next-Consensus-Architecture-Proposal_zh)。 这意味着，某些peer在没有执行交易或查看chaincode逻辑的情况下想他们的ledger申请背书结果。
 9. API / Enginer 分离。按需插入不同的存储引擎。
 
-<a name="api"></a>
-## API
+
+## <a name="api"></a>API
 
 以Go伪代码写成的建议API
 
@@ -216,8 +216,8 @@ type BlockChain interface {
 
 # Engine 具体思路
 
-<a name="pointintime"></a>
-### 时间点查询
+
+### <a name="pointintime"></a>时间点查询
 
 在抽象的时间方面，有三种查询对chaincode和应用开发者非常重要：
 
@@ -232,8 +232,8 @@ type BlockChain interface {
 3. 关联：确定是否Alice在同一天同一加油站买过不止一次油。将此信息输入诈骗检测模型。
 4. 预测: 查询Alice最后10个交易的市、州、国和金额。这些信息被输入风险/欺诈检测模型。
 
-<a name="querylanguage"></a>
-### 查询语言
+
+### <a name="querylanguage"></a>查询语言
 
 开发一种查询语言来支持不同的查询范围并不简单。面临的挑战：
 
