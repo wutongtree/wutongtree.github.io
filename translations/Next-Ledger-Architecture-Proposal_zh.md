@@ -18,6 +18,7 @@ description: ""
 该文档是基于社区反馈的未来ledger架构的一个提案。 所有的输入都是社区努力的目标。
 
 ##### 目录  
+
 [目的](#motivation)  
 [API](#api)  
 [时间点查询](#pointintime)  
@@ -25,6 +26,7 @@ description: ""
 
 <a name="motivation"></a>
 ## 目的
+
 探索新ledger架构的动机来自于社区反馈。现存的ledger可以支持一些（但不是所有）下面的需求，我们要探索一种新的ledger来满足已经了解的所有需求。 根据在很多社区（Slack、Github等）及面对面的讨论，很显然，大家强烈希望支持以下需求：
 
 1. 时间点查询 - 在上一区块查询chaincode state，容易跟踪**没有**重放交易的谱系
@@ -216,6 +218,7 @@ type BlockChain interface {
 
 <a name="pointintime"></a>
 ### 时间点查询
+
 在抽象的时间方面，有三种查询对chaincode和应用开发者非常重要：
 
 1. 查询一个key的最新value。(类型: 当前; 例如，现在Alice的账户里有多少钱？)
@@ -231,6 +234,7 @@ type BlockChain interface {
 
 <a name="querylanguage"></a>
 ### 查询语言
+
 开发一种查询语言来支持不同的查询范围并不简单。面临的挑战：
 
 1. 随着开发人员需求的增长扩展查询语言。截至目前，开发人员的请求已经不大。随着Hyperledger项目的用户增加，查询将更复杂。
