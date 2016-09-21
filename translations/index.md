@@ -7,5 +7,6 @@ group: navigation
 {% include JB/setup %}
 
 ## 架构设计
-* [[翻译]Next Ledger Architecture Proposal](Next-Ledger-Architecture-Proposal_zh)
-* [[翻译]Next Consensus Architecture Proposal](Next-Consensus-Architecture-Proposal_zh)
+* [[翻译]下一代Ledger架构提案](Next-Ledger-Architecture-Proposal_zh)
+* [[翻译]下一代Consensus架构提案](Next-Consensus-Architecture-Proposal_zh)
+* [[翻译]fabric的安装与运行](setup_build_zh)
