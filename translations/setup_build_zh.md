@@ -102,6 +102,7 @@ vagrant ssh
 <br/>
 <br/>
 <br/>
+
 ## 构建 fabric
 
 下面这些说明假设你已经搭建好了[开发环境](devenv.md).
@@ -209,6 +210,7 @@ go test github.com/hyperledger/fabric/core/container -run=BuildImage_Obcca
 <br/>
 <br/>
 <br/>
+
 ## 在Vagrant之外构建
 
 在Vagrant之外构建项目并运行peer时可能的。一般来说，就是“翻译” vagrant [安装文件](https://github.com/hyperledger/fabric/blob/master/devenv/setup.sh) 里的命令到你选择的平台上。
@@ -309,6 +311,7 @@ make peer
 <br/>
 <br/>
 <br/>
+
 ## 配置
 
 配置操作使用 [viper](https://github.com/spf13/viper) 和 [cobra](https://github.com/spf13/cobra)库。
@@ -321,6 +324,7 @@ make peer
 <br/>
 <br/>
 <br/>
+
 ## 日志
 
 日志操作使用 [go-logging](https://github.com/op/go-logging) 库。 
