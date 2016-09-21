@@ -99,9 +99,6 @@ vagrant ssh
 
 **Windows 10 用户注意:** vagrant 在 Windows 10 有个已知的问题（见 [mitchellh/vagrant#6754](https://github.com/mitchellh/vagrant/issues/6754)）。如果 `vagrant up` 命令失败，可能是因为没有安装 Microsoft Visual C++ Redistributable。你需要[下载](http://www.microsoft.com/en-us/download/details.aspx?id=8328)缺失的包并安装。
 
-<br/>
-<br/>
-<br/>
 
 ## 构建 fabric
 
@@ -207,9 +204,6 @@ go test github.com/hyperledger/fabric/core/container -run=BuildImage_Peer
 go test github.com/hyperledger/fabric/core/container -run=BuildImage_Obcca
 ```
 
-<br/>
-<br/>
-<br/>
 
 ## 在Vagrant之外构建
 
@@ -308,9 +302,6 @@ cd $GOPATH/src/github.com/hyperledger/fabric
 make peer
 ```
 
-<br/>
-<br/>
-<br/>
 
 ## 配置
 
@@ -321,9 +312,6 @@ make peer
     CORE_PEER_LOGGING_LEVEL=CRITICAL peer
 
 
-<br/>
-<br/>
-<br/>
 
 ## 日志
 
