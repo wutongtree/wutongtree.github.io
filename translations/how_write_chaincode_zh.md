@@ -11,11 +11,6 @@ description: ""
 
 ---
 
-* 目录
-{:toc}
-
----
-
 
 
 # 如何编写 chaincode
@@ -260,7 +255,7 @@ func main() {
 
 如果没有收到 "Login successful" 的相应信息，返回查看是否正确复制enrollID 和 secret。如此你的enrollID 便设置成功，只有就可以用这个ID对chaincode 来deplo、invoke、quer了。
 
-### Deploying the chaincode
+### Deploy
 
 为了通了rest接口deploy chaincode，你需要将chaincode源码放到github仓库。当你向peer发送一个deploy请求时，将chaincode仓库的url作为必要的参数包含到请求里。
 
