@@ -42,7 +42,7 @@ Chaincode 是一段部署在 [Hyperledger fabric](https://github.com/hyperledger
 1. 下载并安装 Golang 。如果是第一次安装 Go， 请按照说明[正确安装](https://golang.org/doc/install#testing) 。
 2. 添加 Hyperledger shim 源码到 Go 工作目录 (就是你设置的 $GOPATH) 。打开终端输入以下命令：
 
-	```
+	```go
 	cd $GOPATH
 	go get github.com/hyperledger/fabric/core/chaincode/shim
 	```	
