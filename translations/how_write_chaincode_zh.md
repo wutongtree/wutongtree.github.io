@@ -42,10 +42,10 @@ Chaincode 是一段部署在 [Hyperledger fabric](https://github.com/hyperledger
 1. 下载并安装 Golang 。如果是第一次安装 Go， 请按照说明[正确安装](https://golang.org/doc/install#testing) 。
 2. 添加 Hyperledger shim 源码到 Go 工作目录 (就是你设置的 $GOPATH) 。打开终端输入以下命令：
 
-	```
-	cd $GOPATH
-	go get github.com/hyperledger/fabric/core/chaincode/shim
-	```	
+```
+cd $GOPATH
+go get github.com/hyperledger/fabric/core/chaincode/shim
+```	
 3. [IBM Bluemix](https://console.ng.bluemix.net/) 的 IBM Blockchain service 目前要求chain代码在 [GitHub](https://Github.com/) 仓库中。因此，如果还没有Github账号就[注册一个](http://github.com)。
 4. 如果没有安装Git，就先 [安装](https://help.github.com/articles/set-up-git/)。
 
@@ -54,20 +54,20 @@ Chaincode 是一段部署在 [Hyperledger fabric](https://github.com/hyperledger
 1. Fork 仓库到自己的github账号 (滚动到顶部，点击 **Fork**)。
 2. 克隆代码到 $GOPATH。
 
-	```
-	cd $GOPATH
-	mkdir -p src/github.com/<yourgithubid>/
-	cd src/github.com/<yourgithubid>/
-	git clone https://github.com/<yourgithubid>/learn-chaincode.git
-	```
+```
+cd $GOPATH
+mkdir -p src/github.com/<yourgithubid>/
+cd src/github.com/<yourgithubid>/
+git clone https://github.com/<yourgithubid>/learn-chaincode.git
+```
 3. 注意，在本教程中我们提供了两个不同的chaincode版本：[初始版](https://github.com/IBM-Blockchain/learn-chaincode/blob/master/start/chaincode_start.go) - chaincode的框架，你可据此继续开发，和 [完成版](https://github.com/IBM-Blockchain/learn-chaincode/blob/master/finished/chaincode_finished.go) - 完成的chaincode。
 4. 确保以下在本地环境执行：
 	- 打开终端
 	
-	```
-	cd $GOPATH/src/github.com/<yourgithubid>/learn-chaincode/start
-	go build ./
-	```
+```
+cd $GOPATH/src/github.com/<yourgithubid>/learn-chaincode/start
+go build ./
+```
 	- 如果已上命令执行出错，请确保在所有步骤之前[Go安装正确](https://golang.org/doc/install#testing)。
 
 
@@ -262,35 +262,35 @@ func main() {
 - 打开终端命令行工具
 - 进入包含 `chaincode_start.go` 的文件夹并且输入：
 
-	```
-	go build ./
-	```
+```
+go build ./
+```
 - 返回无错信息
 - 点击展开 "Chaincode" API
 - 点击展开 `POST /chaincode`
 - 设置 `DeploySpec` 字段(其他字段设空)。复制下边的示例并将path替换为自己的chaincode path，也将secureContext设为上一步 `/registrar` 中的enrollID。
 - chaincode path格式应该如`"https://github.com/johndoe/learn-chaincode/finished"`，即fork的仓库里包含 chaincode_finished.go 文件的那个路径。
 
-	```js
-	{
-		"jsonrpc": "2.0",
-		"method": "deploy",
-		"params": {
-			"type": 1,
-			"chaincodeID": {
-				"path": "https://github.com/johndoe/learn-chaincode/finished"
-			},
-			"ctorMsg": {
-				"function": "init",
-				"args": [
-					"hi there"
-				]
-			},
-			"secureContext": "user_type1_191b8c2993"
+```js
+{
+	"jsonrpc": "2.0",
+	"method": "deploy",
+	"params": {
+		"type": 1,
+		"chaincodeID": {
+			"path": "https://github.com/johndoe/learn-chaincode/finished"
 		},
-		"id": 1
-	}
-	```
+		"ctorMsg": {
+			"function": "init",
+			"args": [
+				"hi there"
+			]
+		},
+		"secureContext": "user_type1_191b8c2993"
+	},
+	"id": 1
+}
+```
 
 请求响应应该如下：
 
@@ -306,26 +306,26 @@ deploy的响应信息中包含一个与chaincode相关的ID（message字段）�
 - 点击展开 `POST /chaincode`
 - 设置 `QuerySpec` 字段 (其他字段设空)。复制下面示例并以deploy时返回的hash ID替换chaincode name，也是用之前 `/registrar` 的enrollID。
 
-	```js
-	{
-		"jsonrpc": "2.0",
-		"method": "query",
-		"params": {
-			"type": 1,
-			"chaincodeID": {
-				"name": "CHAINCODE_HASH_HERE"
-			},
-			"ctorMsg": {
-				"function": "read",
-				"args": [
-					"hello_world"
-				]
-			},
-			"secureContext": "user_type1_xxxxxxxxx"
+```js
+{
+	"jsonrpc": "2.0",
+	"method": "query",
+	"params": {
+		"type": 1,
+		"chaincodeID": {
+			"name": "CHAINCODE_HASH_HERE"
 		},
-		"id": 2
-	}
-	```
+		"ctorMsg": {
+			"function": "read",
+			"args": [
+				"hello_world"
+			]
+		},
+		"secureContext": "user_type1_xxxxxxxxx"
+	},
+	"id": 2
+}
+```
 
 ![Query Example](https://raw.githubusercontent.com/IBM-Blockchain/learn-chaincode/master/imgs/query_response.PNG)
 
@@ -339,27 +339,27 @@ deploy的响应信息中包含一个与chaincode相关的ID（message字段）�
 - 点击展开 `POST /chaincode`
 - 设置 `InvokeSpec` 字段(其他字段设空)。复制下面示例并以hash ID替换chaincode name ，也使用 `/registrar` 时的enrollID。
 
-	```js
-	{
-		"jsonrpc": "2.0",
-		"method": "invoke",
-		"params": {
-			"type": 1,
-			"chaincodeID": {
-				"name": "CHAINCODE_HASH_HERE"
-			},
-			"ctorMsg": {
-				"function": "write",
-				"args": [
-					"hello_world",
-					"go away"
-				]
-			},
-			"secureContext": "user_type1_xxxxxxxxx"
+```js
+{
+	"jsonrpc": "2.0",
+	"method": "invoke",
+	"params": {
+		"type": 1,
+		"chaincodeID": {
+			"name": "CHAINCODE_HASH_HERE"
 		},
-		"id": 3
-	}
-	```
+		"ctorMsg": {
+			"function": "write",
+			"args": [
+				"hello_world",
+				"go away"
+			]
+		},
+		"secureContext": "user_type1_xxxxxxxxx"
+	},
+	"id": 3
+}
+```
 
 ![Invoke Example](https://raw.githubusercontent.com/IBM-Blockchain/learn-chaincode/master/imgs/invoke_response.PNG)
 
