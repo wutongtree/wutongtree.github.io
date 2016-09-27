@@ -63,11 +63,11 @@ git clone https://github.com/<yourgithubid>/learn-chaincode.git
 3. 注意，在本教程中我们提供了两个不同的chaincode版本：[初始版](https://github.com/IBM-Blockchain/learn-chaincode/blob/master/start/chaincode_start.go) - chaincode的框架，你可据此继续开发，和 [完成版](https://github.com/IBM-Blockchain/learn-chaincode/blob/master/finished/chaincode_finished.go) - 完成的chaincode。
 4. 确保以下在本地环境执行：
 	- 打开终端
-	
-```
-cd $GOPATH/src/github.com/<yourgithubid>/learn-chaincode/start
-go build ./
-```
+		
+		```
+		cd $GOPATH/src/github.com/<yourgithubid>/learn-chaincode/start
+		go build ./
+		```
 	- 如果已上命令执行出错，请确保在所有步骤之前[Go安装正确](https://golang.org/doc/install#testing)。
 
 
