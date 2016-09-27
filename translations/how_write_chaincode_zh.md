@@ -42,9 +42,10 @@ Chaincode 是一段部署在 [Hyperledger fabric](https://github.com/hyperledger
 1. 下载并安装 Golang 。如果是第一次安装 Go， 请按照说明[正确安装](https://golang.org/doc/install#testing) 。
 2. 添加 Hyperledger shim 源码到 Go 工作目录 (就是你设置的 $GOPATH) 。打开终端输入以下命令：
 
+	```
 	cd $GOPATH
 	go get github.com/hyperledger/fabric/core/chaincode/shim
-	
+	```	
 3. [IBM Bluemix](https://console.ng.bluemix.net/) 的 IBM Blockchain service 目前要求chain代码在 [GitHub](https://Github.com/) 仓库中。因此，如果还没有Github账号就[注册一个](http://github.com)。
 4. 如果没有安装Git，就先 [安装](https://help.github.com/articles/set-up-git/)。
 
