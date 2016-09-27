@@ -66,6 +66,7 @@ git clone https://github.com/<yourgithubid>/learn-chaincode.git
 		
 		```
 		cd $GOPATH/src/github.com/<yourgithubid>/learn-chaincode/start
+		
 		go build ./
 		```
 	- 如果已上命令执行出错，请确保在所有步骤之前[Go安装正确](https://golang.org/doc/install#testing)。
