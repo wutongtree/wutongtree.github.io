@@ -42,10 +42,10 @@ Chaincode 是一段部署在 [Hyperledger fabric](https://github.com/hyperledger
 1. 下载并安装 Golang 。如果是第一次安装 Go， 请按照说明[正确安装](https://golang.org/doc/install#testing) 。
 2. 添加 Hyperledger shim 源码到 Go 工作目录 (就是你设置的 $GOPATH) 。打开终端输入以下命令：
 
-```
-cd $GOPATH
-go get github.com/hyperledger/fabric/core/chaincode/shim
-```	
+	```
+	cd $GOPATH
+	go get github.com/hyperledger/fabric/core/chaincode/shim
+	```	
 3. [IBM Bluemix](https://console.ng.bluemix.net/) 的 IBM Blockchain service 目前要求chain代码在 [GitHub](https://Github.com/) 仓库中。因此，如果还没有Github账号就[注册一个](http://github.com)。
 4. 如果没有安装Git，就先 [安装](https://help.github.com/articles/set-up-git/)。
 
@@ -54,21 +54,20 @@ go get github.com/hyperledger/fabric/core/chaincode/shim
 1. Fork 仓库到自己的github账号 (滚动到顶部，点击 **Fork**)。
 2. 克隆代码到 $GOPATH。
 
-```
-cd $GOPATH
-mkdir -p src/github.com/<yourgithubid>/
-cd src/github.com/<yourgithubid>/
-git clone https://github.com/<yourgithubid>/learn-chaincode.git
-```
+	```
+	cd $GOPATH
+	mkdir -p src/github.com/<yourgithubid>/
+	cd src/github.com/<yourgithubid>/
+	git clone https://github.com/<yourgithubid>/learn-chaincode.git
+	```
 3. 注意，在本教程中我们提供了两个不同的chaincode版本：[初始版](https://github.com/IBM-Blockchain/learn-chaincode/blob/master/start/chaincode_start.go) - chaincode的框架，你可据此继续开发，和 [完成版](https://github.com/IBM-Blockchain/learn-chaincode/blob/master/finished/chaincode_finished.go) - 完成的chaincode。
 4. 确保以下在本地环境执行：
 	- 打开终端
 	
-```
-cd $GOPATH/src/github.com/<yourgithubid>/learn-chaincode/start
-go build ./
-```
-
+	```
+	cd $GOPATH/src/github.com/<yourgithubid>/learn-chaincode/start
+	go build ./
+	```
 	- 如果已上命令执行出错，请确保在所有步骤之前[Go安装正确](https://golang.org/doc/install#testing)。
 
 
