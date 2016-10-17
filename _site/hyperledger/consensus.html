@@ -269,6 +269,7 @@ return iNoops
 
 <p>上图是发生VIEW-CHANGE的一种情况，就是节点正常收到PRE-PREPARE消息以后都会启动一个定时器，如果在设置的时间内都没有收到回复，就会触发VIEW-CHANGE，该节点就不会再接收除CHECKPOINT
 、VIEW-CHANGE和NEW-VIEW等消息外的其他消息了。NEW-VIEW是由新一轮的primary节点发送的，<em>O</em>是不包含捎带的REQUEST的PRE-PREPARE消息集合，计算方法如下：</p>
+
 <ul>
   <li>primary节点确定<em>V</em>中最新的稳定检查点序列号<em>min-s</em>和PRE-PREPARE消息中最大的序列号<em>max-s</em></li>
   <li>对<em>min-s</em>和<em>max-s</em>之间每个序列号n都生成一个PRE-PREPARE消息。这可能有两种情况：
@@ -290,6 +291,7 @@ return iNoops
 <p>如果每个操作完成都收集证据证明自己的状态没有问题成本就太高了。实际的做法可以是周期性的，比如请求的序号是100的倍数时。这种请求执行完的状态就叫一个检查点，验证过的检查点叫稳定检查点。每个节点维护了多个状态，最新的稳定检查点、多个不稳定的检查点和当前状态。</p>
 
 <p>验证一个检查点的过程如下：</p>
+
 <ul>
   <li>节点<em>i</em>生成一个检查点，广播&lt;CHECKPOINT, <em>n</em>, <em>d</em>, <em>i</em>&gt;𝞂<sub><em>i</em></sub>给其他的节点</li>
   <li>每个节点都检查自己的日志，如果有2<em>f</em>+1个序列号为<em>n</em>，消息摘要<em>d</em>相同的不同节点发送过来的CHECKPOINT消息，就是稳定检查点的证据</li>
