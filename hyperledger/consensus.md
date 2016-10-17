@@ -103,6 +103,7 @@ NOOPS是为了演示共识算法的，要实现一个共识算法的插件，可
 
   * GetNoops返回一个插件对象
 NOOPS和PBFT都是单例模式，输入参数是Stack接口：
+
 ```
 // GetNoops returns a singleton of NOOPS
 func GetNoops(c consensus.Stack) consensus.Consenter {
