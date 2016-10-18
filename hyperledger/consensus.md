@@ -123,6 +123,7 @@ NOOPS只实现了RecvMsg接口，处理了Message_CHAIN_TRANSACTION和Message_CO
 
 ### PBFT协议 ###
 #### 前提假设 ####
+
 * 分布式节点通过网络是连接在一起的
 * 网络节点发送的消息可能会丢，可能会延迟到达，也可能会重复，到达顺序也可能是乱的
 
