@@ -1,6 +1,21 @@
-# Fabric V1.0 术语
+---
+layout: page
+title: "[翻译]Fabric V1.0 术语"
+description: ""
+---
+{% include JB/setup %}
 
-[查看原文](http://hyperledger-fabric.readthedocs.io/en/latest/glossary.html)
+原文：<http://hyperledger-fabric.readthedocs.io/en/latest/glossary.html>
+
+翻译：[梧桐树](https://wutongtree.com)
+
+---
+
+* 目录
+{:toc}
+
+---
+
 
 ## Anchor Peer / 锚节点
 所有其他peer可以发现并与之通信的channel上的一个peer。channel上的每个Member都有一个（或者对个，以防止单点故障）Anchor Peer，允许属于不同Member的peer发现channel上的现有其他peer。
