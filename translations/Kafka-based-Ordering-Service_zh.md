@@ -9,12 +9,6 @@ description: ""
 
 翻译：[梧桐树](https://wutongtree.com)
 
----
-
-* 目录
-{:toc}
-
----
 
 ## 简介
 我们使用Kafka以容错的方式为多链条提供排序服务。排序服务包括带有相应ZooKeeper集成的Kafka集群，和排序服务client与Kafka集群之间的一组排序服务节点（见图1）。
@@ -29,7 +23,7 @@ OSN有如下功能：
 2. 允许使用简单的接口读写chain（指一组clien(即一个channel)访问的log）
 3. 对chain的配置交易（创建chain或者对既存的chain重新配置）进行过滤和验证
 
-## Where does Kafka come in?
+## 如何应用的kafka
 Kafka中的消息写在一个topic partition中，一个Kafka集群可有多个topic，每个topic可有多个partition（见图2）。partition是一个不断有消息加入的、有序的、不可变的消息序列。
 
 ![](../images/kafka-image02.png)
