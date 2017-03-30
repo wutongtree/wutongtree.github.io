@@ -11,3 +11,4 @@ group: navigation
 * [[翻译]下一代Consensus架构提案](Next-Consensus-Architecture-Proposal_zh)
 * [[翻译]Fabric V1.0 术语](Fabric-V1.0-glossary_zh)
 * [[翻译]Read-Write set](read-write-set_zh)
+* [[翻译]基于Kafka的排序服务](Kafka-based-Ordering-Service_zh)
