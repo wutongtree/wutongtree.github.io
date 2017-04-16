@@ -283,7 +283,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 或者使用脚本中的命令手动生成。
 
-## 修改docker-compose文件
+### 修改docker-compose文件
 
 打开docker-compose文件注释掉执行`script.sh`脚本的命令，如下：
 
@@ -296,7 +296,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 	# add the appropriate CHANNEL_NAME parm
 	CHANNEL_NAME=<channel-id> docker-compose up -d
 
-## 命令语法
+### 命令语法
 
 参照`scripts`目录下的`script.sh`脚本中的create和join命令。下面的命令只是针对`PEER0`的，当对orderer和peer执行命令时，需要修改下面给出的四个环境变量的值。
 
@@ -308,7 +308,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 这些每个peer的环境变量的值都在docker-compose文件中。
 
-## Create channel
+### Create channel
 
 在cli容器中执行：
 
@@ -330,7 +330,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 	
 **注意：**剩下的其他命令依然在CLI容器中执行，而且要记住之前命令里每个peer对应的环境变量。
 
-## Join channel
+### Join channel
 
 将指定的peer加入到channel：
 
@@ -344,14 +344,14 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 	
 修改四个环境变量也可以将其他的peer加入到channel中。
 
-## 在peer上install chaincode
+### 在peer上install chaincode
 
 将示例Go代码安装到四个对等节点中的一个：
 
 	# remember to preface this command with the global environment variables for the appropriate peer
 	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
 
-## Instantiate chaincode并定义背书策略
+### Instantiate chaincode并定义背书策略
 
 在一个peer上实例化chaincode，这将对该peer启动一个chaincode容器，并为该chaincode设置背书策略。此例中定义的策略是有`Org0`或`Org1`中的一个peer背书即可。命令如下：
 
@@ -359,12 +359,12 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 	# remember to pass in the correct string for the -C argument.  The default is mychannel
 	peer chaincode instantiate -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('Org0MSP.member','Org1MSP.member')"
 
-## Invoke chaincode
+### Invoke chaincode
 
 	# remember to preface this command with the global environment variables for the appropriate peer
 	peer chaincode invoke -o orderer0:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem  -C mychannel -n mycc -c '{"Args":["invoke","a","b","10"]}'
 	
-## Query chaincode
+### Query chaincode
 
 	# remember to preface this command with the global environment variables for the appropriate peer
 	peer chaincode query -C mychannel -n mycc -c '{"Args":["query","a"]}'
@@ -373,7 +373,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 	Query Result: 90
 
-## 手动生成镜像
+### 手动生成镜像
 
 构建peer和orderer镜像：
 
@@ -396,3 +396,212 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 	hyperledger/fabric-baseimage   x86_64-0.3.0                    f4751a503f02        4 weeks ago         1.27 GB
 	hyperledger/fabric-baseos      x86_64-0.3.0                    c3a4cf3b3350        4 weeks ago         161 MB
 	
+## 使用本地二进制文件
+
+打开vagrant环境：
+
+	cd $GOPATH/src/github.com/hyperledger/fabric/devenv
+	
+	# you may have to first start your VM with vagrant up
+	vagrant ssh
+
+在fabric目录下执行下面命令编译peer和orderer：
+	
+	make clean
+	make native
+	
+生成`ccenv `镜像：
+
+	make peer-docker
+
+然后打开两个终端都进入vagrant，至此有三个终端都在vagrant里。
+
+开始前首先清空ledger文件夹`/var/hyperledger/`（每次运行后，为避免错误或重复，都要清空）:
+
+	rm -rf /var/hyperledger/*
+
+#### 终端1
+
+使用`configtxgen `工具创建orderer创世区块：
+
+	configtxgen -profile SampleSingleMSPSolo -outputBlock orderer.block
+
+#### 终端2
+
+用刚生成的创世区块启动orderer：
+
+	ORDERER_GENERAL_GENESISMETHOD=file ORDERER_GENERAL_GENESISFILE=./orderer.block orderer
+
+#### 终端1
+
+创建 channel configuration transaction：
+
+	configtxgen -profile SampleSingleMSPSolo -outputCreateChannelTx channel.tx -channelID <channel-ID>
+	
+执行成功会在当前目录生成`channel.tx`
+
+#### 终端3
+
+以`chainless `模式启动peer：
+
+	peer node start --peer-defaultchain=false
+
+### Create channel
+
+以`channel.tx`为参数创建channel：
+
+	peer channel create -o 127.0.0.1:7050 -c mychannel -f channel.tx
+
+执行后在当前目录生成一个channel的创世区块`mychannel.block`
+
+### Join channel
+
+通过channel的创世区块`mychannel.block`加入channel：
+
+	peer channel join -b mychannel.block
+
+### Install chaincode
+
+在peer上安装chaincode：
+	
+	peer chaincode install -o 127.0.0.1:7050 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
+	
+执行成功后查看文件可以看到`mycc.1.0`:
+
+	ls /var/hyperledger/production/chaincodes
+
+### Instantiate chaincode
+
+实例化chaincode：
+
+	peer chaincode instantiate -o 127.0.0.1:7050 -C mychannel -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Args":["init","a", "100", "b","200"]}'
+	
+`docker ps`查看运行中的容器，如果chaincode启动成功，则有如下显示：
+
+	CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+	bd9c6bda7560        dev-jdoe-mycc-1.0   "chaincode -peer.a..."   5 seconds ago       Up 5 seconds                            dev-jdoe-mycc-1.0
+
+### Invoke chaincode
+
+调用chaincode从“a”转移“10”给“b“：
+	
+	peer chaincode invoke -o 127.0.0.1:7050 -C mychannel -n mycc -c '{"Args":["invoke","a","b","10"]}'
+
+### Query chaincode
+
+查询”a“的值：
+
+	# this should return 90
+	peer chaincode query -o 127.0.0.1:7050 -C mychannel -n mycc -c '{"Args":["query","a"]}'
+
+**运行完成后不要忘记清空ledger文件夹`/var/hyperledger/`：**
+
+	rm -rf /var/hyperledger/*
+
+## 使用CouchDB
+
+可以将stateDB默认的goleveldb替换成CouchDB。对于CouchDB，chaincode各功能依然可用，但将chaincode数据以JSON方式存储的话就可使用CouchDB的复杂查询的功能。
+
+为了使用CouchDB，除了最前面的”前提“一节的操作外，还需要下边两步启动CouchDB容器并将之与peer容器关联：
+
+* 构建CouchDB镜像：
+	
+		# make sure you are in the fabric directory
+		make couchdb
+		
+* 编辑`fabric/examples/e2e_cli/docker-compose.yaml`和`docker-compose.yam`，将所有与CouchDB有关的内容取消注释。这样`chaincode_example02`就可以才CouchDB下运行了。
+	
+**注意：**如果将CouchDB容器的端口映射的主机，请一定要注意安全。在开发环境中将端口映射出来可以通过CouchDB的web界面可视化操作数据。生产环境中一般不会做端口映射，以限制CouchDB的外部访问。
+	
+可以用`chaincode_example02`在CouchDB下执行上边的chaincode操作，但是为了使用CouchDB的复杂查询功能，chaincode数据一定要以JSON格式存储（例如`fabric/examples/chaincode/go/marbles02 `）。
+
+使用`手动执行交易`这一节中的步骤install、instantiate、invoke和query `marbles02`，执行完`Join channel`这步后使用下边的命令操作`marbles02`：
+
+* 在`PEER0`上安装并实例化chaincode
+		
+		peer chaincode install -o orderer0:7050 -n marbles -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/marbles02
+		peer chaincode instantiate -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n marbles -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/marbles02 -c '{"Args":["init"]}' -P "OR ('Org0MSP.member','Org1MSP.member')"
+		
+* 创建一些marble并移动它们
+		
+		peer chaincode invoke -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n marbles -c '{"Args":["initMarble","marble1","blue","35","tom"]}'
+		peer chaincode invoke -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n marbles -c '{"Args":["initMarble","marble2","red","50","tom"]}'
+		peer chaincode invoke -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n marbles -c '{"Args":["initMarble","marble3","blue","70","tom"]}'
+		peer chaincode invoke -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n marbles -c '{"Args":["transferMarble","marble2","jerry"]}'
+		peer chaincode invoke -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n marbles -c '{"Args":["transferMarblesBasedOnColor","blue","jerry"]}'
+		peer chaincode invoke -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n marbles -c '{"Args":["delete","marble1"]}'
+
+* 如果做了CouchDB容器的端口映射，可以通过web界面查看数据，可以看到名为`mychannel `的数据库及其文档
+	
+	* 如果使用的是vagrant环境
+		
+			http://localhost:15984/_utils
+	* 如果不是vagrant环境，使用CouchDB容器指定的端口
+			
+			http://localhost:5984/_utils
+* 可有规律的查询chaincode（例如，读取`marble2`）
+
+		peer chaincode query -C mychannel -n marbles -c '{"Args":["readMarble","marble2"]}'
+	
+	可以看到`marble2`的详细信息：
+		
+		Query Result: {"color":"red","docType":"marble","name":"marble2","owner":"jerry","size":50}
+	
+	获取`marble1`的历史：
+		
+		peer chaincode query -C mychannel -n marbles -c '{"Args":["getHistoryForMarble","marble1"]}'
+	
+	可以看到操作过`marble1`的交易：
+	
+		Query Result: [{"TxId":"1c3d3caf124c89f91a4c0f353723ac736c58155325f02890adebaa15e16e6464", "Value":{"docType":"marble","name":"marble1","color":"blue","size":35,"owner":"tom"}},{"TxId":"755d55c281889eaeebf405586f9e25d71d36eb3d35420af833a20a2f53a3eefd", "Value":{"docType":"marble","name":"marble1","color":"blue","size":35,"owner":"jerry"}},{"TxId":"819451032d813dde6247f85e56a89262555e04f14788ee33e28b232eef36d98f", "Value":}]
+	
+	还可以执行复杂查询，比如查询`jerry`所拥有的marble：
+		
+		peer chaincode query -C mychannel -n marbles -c '{"Args":["queryMarblesByOwner","jerry"]}'
+	
+	查询结果为`jerry`所拥有的2个marble的信息：
+	
+		Query Result: [{"Key":"marble2", "Record":{"color":"red","docType":"marble","name":"marble2","owner":"jerry","size":50}},{"Key":"marble3", "Record":{"color":"blue","docType":"marble","name":"marble3","owner":"jerry","size":70}}]
+		
+	通过`owner`字段等于`jerry`查询：
+		
+		peer chaincode query -C mychannel -n marbles -c '{"Args":["queryMarbles","{\"selector\":{\"owner\":\"jerry\"}}"]}'
+	
+	查询结果如下：
+		
+		Query Result: [{"Key":"marble2", "Record":{"color":"red","docType":"marble","name":"marble2","owner":"jerry","size":50}},{"Key":"marble3", "Record":{"color":"blue","docType":"marble","name":"marble3","owner":"jerry","size":70}}]
+		
+## 数据持久化
+
+如果需要对peer或CouchDB容器的数据持久化，一种选择是将容器的相关目录挂在到docker主机。例如，将下边两行内容放到`docker-compose.yaml`文件中的对应peer处：
+	
+	volumes:
+	 - /var/hyperledger/peer0:/var/hyperledger/production
+
+将下边两行放到对应的CouchDB处：
+	
+	volumes:
+ 	- /var/hyperledger/couchdb0:/opt/couchdb/data
+
+## 故障排出
+
+* 每次运行后要清理文件
+* 如果出现docker错误，则删除镜像，从头再操作一遍
+		
+		make clean
+		make peer-docker orderer-docker
+
+* 如果出现下面的错误
+		
+		Error: Error endorsing chaincode: rpc error: code = 2 desc = Error installing chaincode code mycc:1.0(chaincode /var/hyperledger/production/chaincodes/mycc.1.0 exits)
+	
+	chaincode镜像（如`dev-peer0-mycc-1.0`或`dev-peer1-mycc-1.0`）可能是以前运行过的。删除它们然后重试。
+	
+		docker rmi -f $(docker images | grep peer[0-9]-peer[0-9] | awk '{print $3}')
+		
+* 使用`down`选项清理网络
+		
+		./network_setup.sh down
+		Next  Previous
+
+
