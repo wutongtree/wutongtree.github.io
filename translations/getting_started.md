@@ -26,40 +26,40 @@ description: ""
 
 完成以下安装Fabric源码和编译`configtxgen`工具：
 
-* 完成[环境安装](http://hyperledger-fabric.readthedocs.io/en/latest/dev-setup/devenv.html)步骤，并设置正确的`$GOPATH`环境变量。此过程会将各种必须的软件依赖安装到你的机器上。
+* 完成[环境安装](http://hyperledger-fabric.readthedocs.io/en/latest/dev-setup/devenv.html)，并设置正确的`$GOPATH`环境变量。
 * 拉取Fabric源码
 
 		git clone https://github.com/hyperledger/fabric.git
 
 * 编译`configtxgen`工具
 
-	如果运行在Linux，打开终端并在Fabric目录下执行以下命令：
+	* 如果运行在Linux，在Fabric目录下执行以下命令：
 		
-		cd $GOPATH/src/github.com/hyperledger/fabric
-		make configtxgen
-		# 如果出错：'ltdl.h' file not found
-		sudo apt install libtool libltdl-dev
-		# 然后再运行make
-		make configtxgen
+			cd $GOPATH/src/github.com/hyperledger/fabric
+			make configtxgen
+			# 如果出错：'ltdl.h' file not found
+			sudo apt install libtool libltdl-dev
+			# 然后再运行make
+			make configtxgen
 	
-	如果运行在OSX，首先安装Xcode 8.0及以上版本，然后打开终端并在Fabric目录下执行以下命令：
+	* 如果运行在OSX，先安装Xcode 8.0或以上版本，然后在Fabric目录下执行以下命令：
 	
-		# install Homebrew
-		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-		# add gnu-tar
-		brew install gnu-tar --with-default-names
-		# add libtool
-		brew install libtool
-		# make the configtxgen
-		make configtxgen
+			# 安装 Homebrew
+			/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+			# 添加 gnu-tar
+			brew install gnu-tar --with-default-names
+			# 添加 libtool
+			brew install libtool
+			# 编译 configtxgen
+			make configtxgen
 	
-	编译成功后会有以下输出：
+		编译成功后输出：
 	
-		build/bin/configtxgen
-		CGO_CFLAGS=" " GOBIN=/Users/johndoe/work/src/github.com/hyperledger/fabric/build/bin go install -ldflags "-X github.com/hyperledger/fabric/common/metadata.Version=1.0.0-snapshot-8d3275f -X github.com/hyperledger/fabric/common /metadata.BaseVersion=0.3.0 -X github.com/hyperledger/fabric/common/metadata.BaseDockerLabel=org.hyperledger.fabric"       github.com/hyperledger/fabric/common/configtx/tool/configtxgen
-		Binary available as build/bin/configtxgen``
+			build/bin/configtxgen
+			CGO_CFLAGS=" " GOBIN=/Users/johndoe/work/src/github.com/hyperledger/fabric/build/bin go install -ldflags "-X github.com/hyperledger/fabric/common/metadata.Version=1.0.0-snapshot-8d3275f -X github.com/hyperledger/fabric/common /metadata.BaseVersion=0.3.0 -X github.com/hyperledger/fabric/common/metadata.BaseDockerLabel=org.hyperledger.fabric"       github.com/hyperledger/fabric/common/configtx/tool/configtxgen
+			Binary available as build/bin/configtxgen``
 		
-	其可执行文件放在Fabric目录的`build/bin/configtxgen`
+	编译后执行文件放在Fabric目录下的的`build/bin/configtxgen`
 	
 ## 执行完整脚本
 
@@ -67,12 +67,12 @@ description: ""
 
 进入`examples/e2e_cli`目录，首先从Docker Hub拉取镜像：
 
-	# make the script an executable
+	# 使脚本可执行
 	chmod +x download-dockerimages.sh
-	# run the script
+	# 执行脚本
 	./download-dockerimages.sh	
 
-这个过程会需要几分钟。脚本执行完成后，在终端有以下输出：
+这个过程会需要几分钟，脚本执行后输出：
 
 	===> List out hyperledger docker images
 	hyperledger/fabric-ca          latest               35311d8617b4        7 days ago          240 MB
@@ -96,7 +96,7 @@ description: ""
 
 	./network_setup.sh up <channel-ID>
 
-如果没有设置`channel-ID`参数，channel名默认是`mychannel`。脚本执行成功后，终端显示如下信息：
+如果没有设置`channel-ID`参数，channel名默认是`mychannel`。脚本执行成功后输出：
 
 	===================== Query on PEER3 on channel 'mychannel' is successful =====================
 
@@ -104,14 +104,14 @@ description: ""
 
 此时，网络启动运行并测试成功。
 
-## 清理
+### 清理
 
-关闭网络：
+停止网络：
 
-	# make sure you're in the e2e_cli directory
+	# 在e2e_cli目录下
 	docker rm -f $(docker ps -aq)
 
-然后执行`docker images`命令查看Chaincode镜像，会有类似下面的内容：
+然后执行`docker images`命令查看Chaincode镜像，类似输出如下：
 
 	REPOSITORY                     TAG                  IMAGE ID            CREATED             SIZE
 	dev-peer3-mycc-1.0             latest               13f6c8b042c6        5 minutes ago       176 MB
@@ -126,30 +126,30 @@ description: ""
 
 	docker rmi -f 13f e27 111
 
-最后删除配置结果，进入`crypto/orderer`目录，删除`orderer.block`和`channel.tx`。
+最后删除配置结果，在`crypto/orderer`目录删除`orderer.block`和`channel.tx`。
 
 ## configtxgen
 
-configtxgen工具用来生成两个内容：	Orderer的**bootstrap block**和Fabric的**channel configuration transaction**。
+configtxgen工具生成两个内容：	Orderer的**bootstrap block**和Fabric的**channel configuration transaction**。
 
-这orderer block是ordering服务的创世区块，这channel transaction文件在create channel时会被广播给orderer。
+orderer block是ordering服务的创世区块；channel transaction文件在create channel时会被广播给orderer。
 
-`configtx.yaml`包含网络的定义，并给出了网络组件的脱皮结构-2个成员（Org0和Org1）分别管理维护2个peer。还指出每个网络实体的加密材料的存储位置。`crypto`目录包含每个实体的admin证书、ca证书、签名证书和私钥。
+`configtx.yaml`包含网络的定义，并给出了网络组件的拓扑结构--2个成员（Org0和Org1）分别管理维护2个peer。还指出每个网络实体的加密材料的存储位置。`crypto`目录包含每个实体的admin证书、ca证书、签名证书和私钥。
 
-为了方便使用，我们提供了一个脚本`generateCfgTrx.sh`，该脚本整合了`configtxgen`的执行过程，执行后会生成两个配置结果：`orderer.block`和`channel.tx`。如果你运行过上边的`network_setup.sh`则这两个配置结果就生成过，进入`crypto/orderer`目录确认是否被删除。
+为了方便使用，我们提供了一个脚本`generateCfgTrx.sh`，该脚本整合了`configtxgen`的执行过程，执行后会生成两个配置结果：`orderer.block`和`channel.tx`。如果你运行过上边的`network_setup.sh`则这两个配置结果已生成，要先到`crypto/orderer`目录将之删除。
 
-## 执行`generateCfgTrx.sh`脚本
+### 执行`generateCfgTrx.sh`脚本
 
-在`e2e_cli`目录下执行：
+在`e2e_cli`目录下：
 
 	cd $GOPATH/src/github.com/hyperledger/fabric/examples/e2e_cli
 
 `generateCfgTrx.sh`脚本有个可选参数`channel-ID`，如果不设此参数，则默认为`mychannel`。
 
-	# as mentioned above, the <channel-ID> parm is optional
+	# 如上所述，<channel-ID> 参数是可选的
 	./generateCfgTrx.sh <channel-ID>
 
-该脚本执行成功后，输出一下内容：
+执行成功后输出：
 
 	2017/02/28 17:01:52 Generating new channel configtx
 	2017/02/28 17:01:52 Creating no-op MSP instance
@@ -162,15 +162,15 @@ configtxgen工具用来生成两个内容：	Orderer的**bootstrap block**和Fab
 
 生成的`orderer.block`和`channel.tx`两个文件存放在`crypto/orderer`目录。
 
-`orderer.block`是ordering服务的创世区块，`channel.tx`包含新channel的配置信息。如前所述，这俩文件都来自`configtx.yaml`及其包含的向加密材料和网络信息的数据。
+`orderer.block`是ordering服务的创世区块，`channel.tx`包含新channel的配置信息。如前所述，这俩文件都来自`configtx.yaml`及其所包含的加密材料和网络信息的数据。
 
-***注意：***也可以手动执行脚本`generateCfgTrx.sh`里的命令，打开脚本并分析命令语法，如果使用这种方式，则必须用`e2e_cli`目录里的`configtx.yaml`文件替换Fabric common/configtx/tool目录下默认的`configtx.yaml`，然后返回fabric目录执行这些命令，前提是确保之前`generateCfgTrx.sh`生成的两个文件删除。
+***注意：***也可手动执行脚本`generateCfgTrx.sh`里的命令。如果使用这种方式，则必须先用`e2e_cli`目录下的`configtx.yaml`替换Fabric common/configtx/tool目录下默认的`configtx.yaml`，然后返回fabric目录执行这些命令，前提是删除之前`generateCfgTrx.sh`生成的两个文件。
 
 ## 启动网络
 
-我们将使用docker-compose来启动网络，如果没有拉取Fabric镜像，则返回上边去拉取镜像。
+使用docker-compose启动网络，如果没有拉取Fabric镜像，则返回之前的操作去拉取镜像。
 
-脚本`script.sh`嵌入到docker-compose文件里，该脚本将peer加入到channel并向peer发送read/write请求，如此便可不需手动执行命令而查看交易流程。如果不想使用这个脚本自动执行交易，可以跳到下面“手动执行交易”一节。
+脚本`script.sh`嵌入到docker-compose文件里，该脚本将peer加入到channel并向peer发送read/write请求，如此便可自动执行交易流程。如果不想使用这个脚本自动执行交易，可以跳到下面“手动执行交易”一节。
 
 在`e2e_cli`目录下使用docker-compose生成网络实体并执行嵌入的脚本：
 
@@ -180,7 +180,7 @@ configtxgen工具用来生成两个内容：	Orderer的**bootstrap block**和Fab
 
 	CHANNEL_NAME=mychannel docker-compose up -d
 	
-等待30s，因为背后有交易会发送到peer。执行`docker ps`查看运行状态的container，可以看到如下内容：
+等待一会儿，因为背后有交易会发送到peer。执行`docker ps`查看运行状态的container，可以看到如下内容：
 
 	vagrant@hyperledger-devenv:v0.3.0-4eec836:/opt/gopath/src/github.com/hyperledger/fabric/examples/e2e_cli$ docker ps
 	CONTAINER ID        IMAGE                        COMMAND                  CREATED              STATUS              PORTS                                              NAMES
@@ -193,33 +193,31 @@ configtxgen工具用来生成两个内容：	Orderer的**bootstrap block**和Fab
 	1216896b7b4f        hyperledger/fabric-peer      "peer node start -..."   About a minute ago   Up About a minute   0.0.0.0:7051->7051/tcp, 0.0.0.0:7053->7053/tcp     peer0
 	155ff8747b4d        hyperledger/fabric-orderer   "orderer"                About a minute ago   Up About a minute   0.0.0.0:7050->7050/tcp                             orderer
 
-## 背后发生了什么？
+### 背后发生了什么？
 
 * 在CLI容器中执行了脚本`script.sh`。该脚本用默认的`mychannel`执行`createChannel`命令，这个命令用到了之前`configtxgen `工具生成的`channel.tx`。
 * `createChannel `执行后会生成一个创世区块`mychannel.block`并保存到当前目录。
-* 对4个peer分别执行`joinChannel `命令，通过初始区块`mychannel.block`加入channel。
-* 至此，有一个channel包含4个peer和2个organization。
-* `PEER0 `和`PEER1`属于Org0，`PEER2 `和`PEER3`属于Org1。
-* 这些关系的定义都在`configtx.yaml`中
-* Chaincode ` chaincode_example02 `被install到`PEER0`和`PEER2`
+* 对4个peer分别执行`joinChannel `命令，通过初始区块`mychannel.block`加入channel。至此，有一个channel包含4个peer和2个organization。
+* `PEER0 `和`PEER1`属于Org0，`PEER2 `和`PEER3`属于Org1。这些关系的定义都在`configtx.yaml`中
+* Chaincode `chaincode_example02 `被install到`PEER0`和`PEER2`
 * 然后Chaincode在`PEER2`上instantiate。实例化是指启动容器和初始化与Chaincode相关的键值对，本例中的初始值是` [“a”,”100” “b”,”200”]`。实例化的结果是一个名为`dev-peer2-mycc-1.0`的容器启动，注意，这个容器仅是针对`PEER2`。***（译注：尤其注意这里仅仅是启动了一个container）***
-* 实例化时还会带有背书策略参数，本例中背书策略为`-P "OR ('Org0MSP.member','Org1MSP.member')"，意味着任何交易必须由绑定到Org0或者Org1的peer背书。
-* 对于“a”的query请求发送到`PEER0 `。在之前Chaincode被install到`PEER0 `了，所以就启动了一个名为`dev-peer0-mycc-1.0 `的新容器，然后返回查询结果。由于没有write操作发生，所以“a”的值依然是“100”。
+* 实例化时还会带有背书策略参数，本例中背书策略为`-P "OR ('Org0MSP.member','Org1MSP.member')"，意思是任何交易必须由绑定到Org0或者Org1的peer背书。
+* 对于“a”的query请求发送到`PEER0 `。在之前Chaincode被install到`PEER0 `了，所以就可以启动一个名为`dev-peer0-mycc-1.0 `的新容器，然后返回查询结果。由于没有write操作发生，所以“a”的值依然是“100”。
 * 从“a“转移”10“给”b”的invoke请求发送到`PEER0 `
 * Chaincode install到`PEER3 `
 * 对“a”的query请求发送到`PEER3 `。这启动了第三个名为`dev-peer3-mycc-1.0`的容器，并返回查询结果90，正确的反映了之前的交易。
 
-## 这表明了什么？
+### 这表明了什么？
 
-Chaincode必须被install到一个peer上才能成功的对这个peer的ledger执行read/write操作。此外，只有当一个peer上针对chaincode执行read/write操作时，这个peer上才会启动该chaincode 容器。（比如，查询“a”的值）***交易致使容器启动***。channel中的所有peer都会维护一个准确的ledger，ledger包含存储了不可变的、有序的交易记录的block，还有维护current state的statedb。这包括那些没有install chaincode的peer（就像上例中的`PEER3 `），然后在这种peer上install chaincode之后就可以直接访问了（就像上例中的`PEER3 `），因为已经instantiate过了。
+Chaincode必须被install到一个peer上才能成功的对这个peer的ledger执行read/write操作。此外，只有当在peer上针对chaincode执行read/write操作时，这个peer上才会启动该chaincode 容器。（比如，查询“a”的值）***交易导致容器启动***。channel中的所有peer（包括那些没有install chaincode的peer，就像上例中的`PEER3 `）都会维护一个准确的ledger，ledger包含存储了不可变的、有序的交易记录的block，还有维护current state的statedb。在peer上install chaincode之后就可以直接使用该peer上的chaincode了（就像上例中的`PEER3 `），因为之前已经instantiate过了 ***（译注：即同一channel中的chaincode只需一次instantiate）***。
 
-## 如何查看这些交易？
+### 查看交易
 
 查看CLI容器的log：
 	
 	docker logs -f cli
 	
-会有以下内容：
+输出：
 
 	2017-02-28 04:31:20.841 UTC [logging] InitFromViper -> DEBU 001 Setting default logging level to DEBUG for command 'chaincode'
 	2017-02-28 04:31:20.842 UTC [msp] GetLocalMSP -> DEBU 002 Returning existing local MSP
@@ -249,9 +247,9 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 这将实时输出通过`script.sh`执行的交易信息。
 
-## 如何查看chaincode log？
+### 查看chaincode日志
 
-对每个chaincode容器单独查看log，输出一下内容：
+对每个chaincode容器单独查看log，输出：
 
 	$ docker logs dev-peer2-mycc-1.0
 	04:30:45.947 [BCCSP_FACTORY] DEBU : Initialize BCCSP [SW]
@@ -272,7 +270,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 ## 手动执行交易
 
-在当前工作目录停止所有容器：
+停止所有容器：
 
 	docker rm -f $(docker ps -aq)
 
@@ -283,17 +281,13 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 	dev-peer0-mycc-1.0             latest               e27456b2bd92        5 minutes ago       176 MB
 	dev-peer2-mycc-1.0             latest               111098a7c98c        5 minutes ago       176 MB
 
-	Remove these images:
+删除这些镜像：
 
-	.. code:: bash
+    docker rmi <IMAGE ID> <IMAGE ID> <IMAGE ID>
 
-    	docker rmi <IMAGE ID> <IMAGE ID> <IMAGE ID>
+比如：
 
-	For example:
-
-	.. code:: bash
-
-    	docker rmi -f 13f e27 111
+  	docker rmi -f 13f e27 111
 
 确保之前生成的配置内容还在，如果删除了就再执行脚本：
 
@@ -310,96 +304,92 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 保存文件，重启网络：
 
-	# make sure you are in the e2e_cli directory where you docker-compose script resides
-	# add the appropriate CHANNEL_NAME parm
+	# 在e2e_cli目录下执行，设置正确的CHANNEL_NAME
 	CHANNEL_NAME=<channel-id> docker-compose up -d
 
 ### 命令语法
 
-参照`scripts`目录下的`script.sh`脚本中的create和join命令。下面的命令只是针对`PEER0`的，当对orderer和peer执行命令时，需要修改下面给出的四个环境变量的值。
+参照`script.sh`脚本中的create和join命令。下面的命令只是针对`PEER0`的，当对orderer和peer执行命令时，需要修改下面给出的四个环境变量的值。
 
-	# Environment variables for PEER0
+	# 对PEER0所用的环境变量
 	CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peer/peer0/localMspConfig
 	CORE_PEER_ADDRESS=peer0:7051
 	CORE_PEER_LOCALMSPID="Org0MSP"
 	CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peer/	peer0/localMspConfig/cacerts/peerOrg0.pem
 
-这些每个peer的环境变量的值都在docker-compose文件中。
+每个peer的环境变量的值都在docker-compose文件中
 
 ### Create channel
 
-在cli容器中执行：
+进去cli容器：
 
 	docker exec -it cli bash
 
-如果执行成功，会有以下信息：
+执行成功输出：
 
 	root@0d78bb69300d:/opt/gopath/src/github.com/hyperledger/fabric/peer#
 
 用`-c`指定channel name，`-f`指定channel configuration transaction（此例中是`channel.tx`），当然也可以使用不同的名称安装 configuration transaction。
 
-	# the channel.tx and orderer.block are mounted in the crypto/orderer directory within your cli container
-	# as a result, we pass the full path for the file
- 	peer channel create -o orderer0:7050 -c mychannel -f crypto/orderer/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/	orderer/localMspConfig/cacerts/ordererOrg0.pem
+	# channel.tx 和 orderer.block 在 cli 容器的 crypto/orderer 目录下
+ 	peer channel create -o orderer0:7050 -c mychannel -f crypto/orderer/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem
 
-由于此例的`channel create`命令是针对orderer的，所以需要修改之前的环境变量，因此上边的命令应该是：
+由于此例的`peer channel create`命令是针对orderer的，所以需要修改之前的环境变量，因此上边的命令应该是：
 
 	CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig CORE_PEER_LOCALMSPID="OrdererMSP" peer channel create -o orderer0:7050 -c mychannel -f crypto/orderer/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem
 	
-**注意：**剩下的其他命令依然在CLI容器中执行，而且要记住之前命令里每个peer对应的环境变量。
+**注意：**下面的其他命令依然在CLI容器中执行，而且要记住命令里每个peer对应的环境变量
 
 ### Join channel
 
 将指定的peer加入到channel：
 
-	# By default, this joins PEER0 only
-	# the mychannel.block is also mounted in the crypto/orderer directory
+	# 默认只将 PEER0 加入
  	peer channel join -b mychannel.block
 
 完整的命令应该是：
 
 	CORE_PEER_MSPCONFIGPATH=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peer/peer0/localMspConfig CORE_PEER_ADDRESS=peer0:7051 CORE_PEER_LOCALMSPID="Org0MSP" CORE_PEER_TLS_ROOTCERT_FILE=$GOPATH/src/github.com/hyperledger/fabric/peer/crypto/peer/peer0/localMspConfig/cacerts/peerOrg0.pem peer channel join -b mychannel.block
 	
-修改四个环境变量也可以将其他的peer加入到channel中。
+修改这四个环境变量将其他的peer加入到channel中
 
 ### Install chaincode
 
-将示例Go代码安装到四个对等节点中的一个：
+将示例chaincode代码安装到四个对等节点中的一个：
 
-	# remember to preface this command with the global environment variables for the appropriate peer
+	# 在命令前面要加上peer对应的四个环境变量
 	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
 
 ### Instantiate chaincode
 
 在一个peer上实例化chaincode，这将对该peer启动一个chaincode容器，并为该chaincode设置背书策略。此例中定义的策略是有`Org0`或`Org1`中的一个peer背书即可。命令如下：
 
-	# remember to preface this command with the global environment variables for the appropriate peer
-	# remember to pass in the correct string for the -C argument.  The default is mychannel
+	# 在命令前面要加上peer对应的四个环境变量
+	# 用 -C 参数设置正确的channel名，默认是 mychannel
 	peer chaincode instantiate -o orderer0:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem -C mychannel -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('Org0MSP.member','Org1MSP.member')"
 
 ### Invoke chaincode
 
-	# remember to preface this command with the global environment variables for the appropriate peer
+	# 在命令前面要加上peer对应的四个环境变量
 	peer chaincode invoke -o orderer0:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $GOPATH/src/github.com/hyperledger/fabric/peer/crypto/orderer/localMspConfig/cacerts/ordererOrg0.pem  -C mychannel -n mycc -c '{"Args":["invoke","a","b","10"]}'
 	
 ### Query chaincode
 
-	# remember to preface this command with the global environment variables for the appropriate peer
+	# 在命令前面要加上peer对应的四个环境变量
 	peer chaincode query -C mychannel -n mycc -c '{"Args":["query","a"]}'
 	
-以上命令的执行结果：
+执行结果：
 
 	Query Result: 90
 
-### 手动生成镜像
+## 手动构建镜像
 
 构建peer和orderer镜像：
 
-	# make sure you are in the fabric directory
-	# if you are unable to generate the images natively, you may need to be in a vagrant environment
+	# 在fabric目录下执行，如果不能顺利生成镜像，则使用vagrant环境
 	make peer-docker orderer-docker
 
-执行`docker images`命令，如果镜像编译成功，会有以下输出：
+执行`docker images`命令输出：
 
 	vagrant@hyperledger-devenv:v0.3.0-4eec836:/opt/gopath/src/github.com/hyperledger/fabric$ docker images
 	REPOSITORY                     TAG                             IMAGE ID            CREATED             SIZE
@@ -416,14 +406,14 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 	
 ## 使用本地二进制文件
 
-打开vagrant环境：
+进去vagrant环境：
 
 	cd $GOPATH/src/github.com/hyperledger/fabric/devenv
 	
-	# you may have to first start your VM with vagrant up
+	# 第一次启动VM用 vagrant up 
 	vagrant ssh
 
-在fabric目录下执行下面命令编译peer和orderer：
+在fabric目录下编译peer和orderer：
 	
 	make clean
 	make native
@@ -434,7 +424,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 然后打开两个终端都进入vagrant，至此有三个终端都在vagrant里。
 
-开始前首先清空ledger文件夹`/var/hyperledger/`（每次运行后，为避免错误或重复，都要清空）:
+前首先清空ledger文件夹`/var/hyperledger/`（每次运行后，为避免错误或重复，都要清空）:
 
 	rm -rf /var/hyperledger/*
 
@@ -494,7 +484,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 	peer chaincode instantiate -o 127.0.0.1:7050 -C mychannel -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Args":["init","a", "100", "b","200"]}'
 	
-`docker ps`查看运行中的容器，如果chaincode启动成功，则有如下显示：
+`docker ps`查看运行中的容器，如果chaincode启动成功，则显示：
 
 	CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
 	bd9c6bda7560        dev-jdoe-mycc-1.0   "chaincode -peer.a..."   5 seconds ago       Up 5 seconds                            dev-jdoe-mycc-1.0
@@ -509,7 +499,7 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 
 查询”a“的值：
 
-	# this should return 90
+	# 返回值应是 90
 	peer chaincode query -o 127.0.0.1:7050 -C mychannel -n mycc -c '{"Args":["query","a"]}'
 
 **运行完成后不要忘记清空ledger文件夹`/var/hyperledger/`：**
@@ -591,12 +581,12 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 		
 ## 数据持久化
 
-如果需要对peer或CouchDB容器的数据持久化，一种选择是将容器的相关目录挂在到docker主机。例如，将下边两行内容放到`docker-compose.yaml`文件中的对应peer处：
+如果需要对peer或CouchDB容器的数据持久化，一种选择是将容器的相关目录挂在到docker主机。例如，将下面两行内容放到`docker-compose.yaml`文件中的对应peer处：
 	
 	volumes:
 	 - /var/hyperledger/peer0:/var/hyperledger/production
 
-将下边两行放到对应的CouchDB处：
+将下面两行放到对应的CouchDB处：
 	
 	volumes:
  	- /var/hyperledger/couchdb0:/opt/couchdb/data
