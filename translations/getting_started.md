@@ -1,3 +1,21 @@
+---
+layout: page
+title: "[翻译]Fabric V1.0 快速入门"
+description: ""
+---
+{% include JB/setup %}
+
+原文：<http://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html>
+
+翻译：[梧桐树](https://wutongtree.com)
+
+---
+
+* 目录
+{:toc}
+
+---
+
 # 快速入门
 
 本文设定了一个简单的Fabric网络场景，包括2个organization，每个有2个peer，并使用“solo” ordering服务。网络实体所需的加密材料（x509证书）已预先生成并放到相应目录和配置文件里了，你无需修改这些配置。`examples/e2e_cli`文件夹里包含了docker-compose文件和要用来创建和测试网络的脚本文件。
@@ -175,7 +193,7 @@ configtxgen工具用来生成两个内容：	Orderer的**bootstrap block**和Fab
 	1216896b7b4f        hyperledger/fabric-peer      "peer node start -..."   About a minute ago   Up About a minute   0.0.0.0:7051->7051/tcp, 0.0.0.0:7053->7053/tcp     peer0
 	155ff8747b4d        hyperledger/fabric-orderer   "orderer"                About a minute ago   Up About a minute   0.0.0.0:7050->7050/tcp                             orderer
 
-## 背后发生了什么呢？
+## 背后发生了什么？
 
 * 在CLI容器中执行了脚本`script.sh`。该脚本用默认的`mychannel`执行`createChannel`命令，这个命令用到了之前`configtxgen `工具生成的`channel.tx`。
 * `createChannel `执行后会生成一个创世区块`mychannel.block`并保存到当前目录。
@@ -191,7 +209,7 @@ configtxgen工具用来生成两个内容：	Orderer的**bootstrap block**和Fab
 * Chaincode install到`PEER3 `
 * 对“a”的query请求发送到`PEER3 `。这启动了第三个名为`dev-peer3-mycc-1.0`的容器，并返回查询结果90，正确的反映了之前的交易。
 
-## 这表明了什么呢？
+## 这表明了什么？
 
 Chaincode必须被install到一个peer上才能成功的对这个peer的ledger执行read/write操作。此外，只有当一个peer上针对chaincode执行read/write操作时，这个peer上才会启动该chaincode 容器。（比如，查询“a”的值）***交易致使容器启动***。channel中的所有peer都会维护一个准确的ledger，ledger包含存储了不可变的、有序的交易记录的block，还有维护current state的statedb。这包括那些没有install chaincode的peer（就像上例中的`PEER3 `），然后在这种peer上install chaincode之后就可以直接访问了（就像上例中的`PEER3 `），因为已经instantiate过了。
 
@@ -344,14 +362,14 @@ Chaincode必须被install到一个peer上才能成功的对这个peer的ledger�
 	
 修改四个环境变量也可以将其他的peer加入到channel中。
 
-### 在peer上install chaincode
+### Install chaincode
 
 将示例Go代码安装到四个对等节点中的一个：
 
 	# remember to preface this command with the global environment variables for the appropriate peer
 	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
 
-### Instantiate chaincode并定义背书策略
+### Instantiate chaincode
 
 在一个peer上实例化chaincode，这将对该peer启动一个chaincode容器，并为该chaincode设置背书策略。此例中定义的策略是有`Org0`或`Org1`中的一个peer背书即可。命令如下：
 

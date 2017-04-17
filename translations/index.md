@@ -12,3 +12,4 @@ group: navigation
 * [[翻译]Fabric V1.0 术语](Fabric-V1.0-glossary_zh)
 * [[翻译]Read-Write set](read-write-set_zh)
 * [[翻译]基于Kafka的排序服务](Kafka-based-Ordering-Service_zh)
+* [[翻译]Fabric V1.0 快速入门](getting_started)
