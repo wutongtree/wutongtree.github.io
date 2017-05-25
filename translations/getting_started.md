@@ -164,7 +164,7 @@ orderer block是ordering服务的创世区块；channel transaction文件在crea
 
 `orderer.block`是ordering服务的创世区块，`channel.tx`包含新channel的配置信息。如前所述，这俩文件都来自`configtx.yaml`及其所包含的加密材料和网络信息的数据。
 
-***注意：***也可手动执行脚本`generateCfgTrx.sh`里的命令。如果使用这种方式，则必须先用`e2e_cli`目录下的`configtx.yaml`替换Fabric common/configtx/tool目录下默认的`configtx.yaml`，然后返回fabric目录执行这些命令，前提是删除之前`generateCfgTrx.sh`生成的两个文件。
+***注意：***也可手动执行脚本`generateCfgTrx.sh`里的命令。如果使用这种方式，则必须先用`e2e_cli`目录下的`configtx.yaml`替换Fabric sampleconfig目录下默认的`configtx.yaml`，然后返回fabric目录执行这些命令，前提是删除之前`generateCfgTrx.sh`生成的两个文件。
 
 ## 启动网络
 
