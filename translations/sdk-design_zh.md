@@ -1,4 +1,21 @@
-# Hyperledger Fabric SDK设计说明书 v1.0## 1 概要Hyperledger Fabric v1.0提供了基本的Protocol Buffers 格式的API通过gRPC协议作用于区块链网络。这些API包含了交易处理、安全的成员关系服务、区块链遍历和事件处理。有很多编程语言支持Protocol Buffers，包括Go, C#, Java, Javascript, Python, and C++。所以有必要给应用开发工程师提供一个本地SDK。
+---
+layout: page
+title: "[翻译]Hyperledger Fabric SDK设计说明书 v1.0"
+description: ""
+---
+{% include JB/setup %}
+
+原文：<https://docs.google.com/document/d/1R5RtIBMW9fZpli37E5Li5_Q9ve3BnQ4q3gWmGZj6Sv4/edit>
+
+翻译：郭立冬 <690748277@qq.com>
+
+---
+
+* 目录
+{:toc}
+
+---
+## 1 概要Hyperledger Fabric v1.0提供了基本的Protocol Buffers 格式的API通过gRPC协议作用于区块链网络。这些API包含了交易处理、安全的成员关系服务、区块链遍历和事件处理。有很多编程语言支持Protocol Buffers，包括Go, C#, Java, Javascript, Python, and C++。所以有必要给应用开发工程师提供一个本地SDK。
 本文档详述了一个SDK应该提供的API最小集合的实现。一个SDK的目标即要解决客户在区块链网络中直接面对的一些原始需求；又要做一些顶层的合理抽象以图方便开发人员开发，并且在本地应用代码中使用这些API后方便开发工作的进行。然而，使用SDK并不会妨碍应用直接调用gRPC的操作。
 请注意，当前的REST API并不被推荐使用，SDK不应该基于使用REST API 而创建。跳过REST直接使用gRPC的原因是：能够控制全双向的数据流（大部分的API调用都是异步的），更好的性能。此外，自从节点内部模块通信使用了gRPC之后，便不必再开放更多的HTTP/HTTPS端口了。
 一个例外的情况是，新的成员服务方式（CA）是按REST API的规则实现的
